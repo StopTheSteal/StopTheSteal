@@ -102,32 +102,19 @@ if __name__ == '__main__':
     ## Adjust maxThreads depending on bandwidth and compute power
     maxThreads = 50
 
-    baseTimestamp = '2020-11-04T02:07:28Z'
-
-    with mp.Pool(maxThreads) as threadPool:
-        threadPool.starmap(CheckUrl, zip(repeat(baseTimestampUrl), repeat(filenameBase[:2]), repeat('04'),repeat('02'),repeat('07'),repeat('27'),milliseconds))
-        threadPool.close()
-        threadPool.join()
-
-    with mp.Pool(maxThreads) as threadPool:
-        threadPool.starmap(CheckUrl, zip(repeat(baseTimestampUrl), repeat(filenameBase[:2]), repeat('04'),repeat('02'),repeat('07'),repeat('28'),milliseconds))
-        threadPool.close()
-        threadPool.join()
-
-
-    # for day in days:
-    #     dd = str(day).zfill(2)
-    #     for hour in hours:
-    #         hh = str(hour).zfill(2)
-    #         for minute in minutes:
-    #             mm = str(minute).zfill(2)
-    #             # print(f'Processing 2020-11-{dd} {hh}:{mm}')
-    #             print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    #             for second in seconds:
-    #                 ss = str(second).zfill(2)
-    #                 # Comment out below print after done testing.  For full run, print at minute interval instead.
-    #                 print(f'Processing 2020-11-{dd} {hh}:{mm}:{ss}')
-    #                 with mp.Pool(maxThreads) as threadPool:
-    #                     threadPool.starmap(CheckUrl, zip(repeat(baseTimestampUrl), repeat(filenameBase[:2]), repeat(dd), repeat(hh), repeat(mm), repeat(ss), milliseconds))
-    #                     threadPool.close()
-    #                     threadPool.join()
+    for day in days:
+        dd = str(day).zfill(2)
+        for hour in hours:
+            hh = str(hour).zfill(2)
+            for minute in minutes:
+                mm = str(minute).zfill(2)
+                # print(f'Processing 2020-11-{dd} {hh}:{mm}')
+                print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                for second in seconds:
+                    ss = str(second).zfill(2)
+                    # Comment out below print after done testing.  For full run, print at minute interval instead.
+                    print(f'Processing 2020-11-{dd} {hh}:{mm}:{ss}')
+                    with mp.Pool(maxThreads) as threadPool:
+                        threadPool.starmap(CheckUrl, zip(repeat(baseTimestampUrl), repeat(filenameBase[:2]), repeat(dd), repeat(hh), repeat(mm), repeat(ss), milliseconds))
+                        threadPool.close()
+                        threadPool.join()
