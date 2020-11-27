@@ -1,4 +1,4 @@
-# version 1.2
+# version 1.3
 
 import json
 import os
@@ -6,6 +6,9 @@ import re
 from datetime import datetime
 
 priorValues = {}
+scriptPath = os.path.dirname(__file__)
+precinctsJsonPath = os.path.join(os.path.dirname(scriptPath),'Data/Precincts/JSON')
+precinctsCsvPath = os.path.join(os.path.dirname(scriptPath),'Data/Precincts/CSV')
 
 
 def BuildCompoundKey(*keys: str) -> str:
@@ -43,7 +46,7 @@ def ProcessCountyData(fileName: str) -> None:
     if timeStamp == None:
         timeStamp = fileName
     stateAbbrev = GetState(fileName)
-    outputFileName = f'{stateAbbrev}CountyData.csv'
+    outputFileName = f'{precinctsCsvPath}/{stateAbbrev}CountyData.csv'
     with open(fileName, 'r') as jsonFile:
         jsonData = json.load(jsonFile)
         if 'county_by_vote_type' in jsonData:
@@ -82,7 +85,7 @@ def ProcessPaPrecinctData(fileName: str) -> None:
     if timeStamp == None:
         timeStamp = fileName
     stateAbbrev = GetState(fileName)
-    outputFileName = f'{stateAbbrev}PrecinctData.csv'
+    outputFileName = f'{precinctsCsvPath}/{stateAbbrev}PrecinctData.csv'
     with open(fileName, 'r') as jsonFile:
         jsonData = json.load(jsonFile)
         if 'precinct_totals' in jsonData and 'precinct_by_vote_type' in jsonData:
@@ -123,7 +126,7 @@ def ProcessPrecinctData(fileName: str) -> None:
     if timeStamp == None:
         timeStamp = fileName
     stateAbbrev = GetState(fileName)
-    outputFileName = f'{stateAbbrev}PrecinctData.csv'
+    outputFileName = f'{precinctsCsvPath}/{stateAbbrev}PrecinctData.csv'
     with open(fileName, 'r') as jsonFile:
         jsonData = json.load(jsonFile)
         if 'precincts' in jsonData:
@@ -169,7 +172,7 @@ def ParseFile(fileName: str) -> None:
 
 
 if __name__ == '__main__':
-    for (directoryPath, subdirectoryList, fileList) in os.walk(os.curdir):
+    for (directoryPath, subdirectoryList, fileList) in os.walk(precinctsJsonPath):
         isStart = True
         priorValues.clear()
         fileList.sort()
@@ -177,10 +180,10 @@ if __name__ == '__main__':
             if fileNameSingle.endswith('.json'):
                 stateAbbrev = GetState(fileNameSingle)
                 if isStart:
-                    precinctFileName = f'{stateAbbrev}PrecinctData.csv'
+                    precinctFileName = f'{precinctsCsvPath}/{stateAbbrev}PrecinctData.csv'
                     if os.path.exists(precinctFileName):
                         os.remove(precinctFileName)
-                    countyFileName = f'{stateAbbrev}CountyData.csv'
+                    countyFileName = f'{precinctsCsvPath}/{stateAbbrev}CountyData.csv'
                     if os.path.exists(countyFileName):
                         os.remove(countyFileName)
                     isStart = False
