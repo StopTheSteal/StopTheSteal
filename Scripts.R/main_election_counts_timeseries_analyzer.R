@@ -49,12 +49,13 @@ if(bool.convert.json.to.csv)
     if(state_abbr %in% c("PA", "FL"))
     {
       lst_county_ids <- generate.county.csv(base_dir = base_dir,
-                                           sid = sid,
-                                           state_abbr = state_abbr,
-                                           file_prefix = file_prefix,
-                                           file_postfixes = file_postfixes)
+                                            sid = sid,
+                                            state_abbr = state_abbr,
+                                            file_prefix = file_prefix,
+                                            file_postfixes = file_postfixes)
       ht_county_ids <- lst_county_ids[["ht_county_ids"]]
       df_county_ids <- lst_county_ids[["df_county_ids"]]
+      df_choices <- lst_county_ids[["df_choices"]]
       rm(lst_county_ids)
       #
       lst_county_vote_type_ids <- generate.county.vote.type.csv(base_dir = base_dir,
@@ -63,11 +64,13 @@ if(bool.convert.json.to.csv)
                                                                 file_prefix = file_prefix,
                                                                 file_postfixes = file_postfixes,
                                                                 ht_county_ids = ht_county_ids,
-                                                                df_county_ids = df_county_ids)
+                                                                df_county_ids = df_county_ids,
+                                                                df_choices = df_choices)
       ht_county_ids    <- lst_county_vote_type_ids[["ht_county_ids"]]
       df_county_ids    <- lst_county_vote_type_ids[["df_county_ids"]]
       ht_vote_type_ids <- lst_county_vote_type_ids[["ht_vote_type_ids"]]
       df_vote_type_ids <- lst_county_vote_type_ids[["df_vote_type_ids"]]
+      df_choices <- lst_county_vote_type_ids[["df_choices"]]
       rm(lst_county_vote_type_ids)
       #
       lst_precinct_ids <- generate.precinct.csv(base_dir = base_dir,
@@ -76,11 +79,13 @@ if(bool.convert.json.to.csv)
                                                 file_prefix = file_prefix,
                                                 file_postfixes = file_postfixes,
                                                 ht_county_ids = ht_county_ids,
-                                                df_county_ids = df_county_ids)
+                                                df_county_ids = df_county_ids,
+                                                df_choices = df_choices)
       ht_county_ids   <- lst_precinct_ids[["ht_county_ids"]]
       df_county_ids   <- lst_precinct_ids[["df_county_ids"]]
       ht_precinct_ids <- lst_precinct_ids[["ht_precinct_ids"]]
       df_precinct_ids <- lst_precinct_ids[["df_precinct_ids"]]
+      df_choices <- lst_precinct_ids[["df_choices"]]
       rm(lst_precinct_ids)
       #
       lst_precinct_vote_type_ids <- generate.precinct.vote.type.csv(base_dir = base_dir,
@@ -93,7 +98,8 @@ if(bool.convert.json.to.csv)
                                                                     ht_precinct_ids = ht_precinct_ids,
                                                                     df_precinct_ids = df_precinct_ids,
                                                                     ht_vote_type_ids = ht_vote_type_ids,
-                                                                    df_vote_type_ids = df_vote_type_ids)
+                                                                    df_vote_type_ids = df_vote_type_ids,
+                                                                    df_choices = df_choices)
       ht_county_ids    <- lst_precinct_vote_type_ids[["ht_county_ids"]]
       df_county_ids    <- lst_precinct_vote_type_ids[["df_county_ids"]]
       ht_precinct_ids  <- lst_precinct_vote_type_ids[["ht_precinct_ids"]]
@@ -102,6 +108,7 @@ if(bool.convert.json.to.csv)
       df_vote_type_ids <- lst_precinct_vote_type_ids[["df_vote_type_ids"]]
       df_precinct_vote_type_ids <- lst_precinct_vote_type_ids[["df_precinct_vote_type_ids"]]
       time_origin_ms <- lst_precinct_vote_type_ids[["time_origin_ms"]]
+      df_choices <- lst_precinct_vote_type_ids[["df_choices"]]
       rm(lst_precinct_vote_type_ids)
     } else if (state_abbr %in% c("NC", "MI", "GA"))
     {
@@ -119,6 +126,7 @@ if(bool.convert.json.to.csv)
       df_county_vote_type_ids <- lst_precinct_ids[["df_county_vote_type_ids"]]
       df_precinct_vote_type_ids <- lst_precinct_ids[["df_precinct_vote_type_ids"]]
       time_origin_ms <- lst_precinct_ids[["time_origin_ms"]]
+      df_choices <- lst_precinct_ids[["df_choices"]]
       rm(lst_precinct_ids)
     }
     df_state_ids_row <- data.frame(
@@ -134,7 +142,8 @@ if(bool.convert.json.to.csv)
     df_state_ids <- rbind(df_state_ids, df_state_ids_row)
     #
     # Generate CSV with votes. Create CSV with "time_offset_ms" for each state, and start "time_offset_ms" from 0.
-    # time_offset_ms, sid, cid, pid, vid, votes_tally, <votes_choice1>, <votes_choice2>, ...
+    # time_offset_ms, sid, cid, pid, vid, tally, <votes_choice1>, <votes_choice2>, <votes_choice3> ...
+    # aggregate all choices that have < 1% into "votes_other"
     generate.precinct.votes.csv(base_dir = base_dir,
                                 time_origin_ms = time_origin_ms,
                                 sid = sid,
@@ -143,7 +152,8 @@ if(bool.convert.json.to.csv)
                                 file_postfixes = file_postfixes,
                                 ht_vote_type_ids = ht_vote_type_ids,
                                 ht_county_ids = ht_county_ids,
-                                ht_precinct_ids = ht_precinct_ids)
+                                ht_precinct_ids = ht_precinct_ids,
+                                df_choices = df_choices)
   } # END for(sid in 1:length(arrStateAbbrs))
   #
   df_state_ids <- df_state_ids[order(df_state_ids$state_abbr),]

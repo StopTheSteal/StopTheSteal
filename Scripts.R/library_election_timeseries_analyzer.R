@@ -942,6 +942,10 @@ generate.county.csv <- function(base_dir, sid, state_abbr, file_prefix, file_pos
     #uncounted_mail_ballots = double(),
     #votes                  = double(),
     stringsAsFactors       = FALSE) 
+  df_choices <- data.frame(
+    choice_name   = character(),
+    choice_weight = numeric(),
+    stringsAsFactors = FALSE)
   for(iTimestampFilePostfix in 1:length(file_postfixes))
   {
     json_postfix_out <- file_postfixes[iTimestampFilePostfix]
@@ -973,6 +977,22 @@ generate.county.csv <- function(base_dir, sid, state_abbr, file_prefix, file_pos
         #res$county_totals[[iCountyTotals]]$votes                       # 0
         #res$county_totals[[iCountyTotals]]$is_reporting                # false
         #
+        new_choices <- names(res$county_totals[[iCountyTotals]]$results)
+        missing_choices_names <- new_choices[!(new_choices %in% df_choices$choice_name)]
+        if(length(missing_choices_names) > 0)
+        {
+          for(choice_name in missing_choices_names)
+          {
+            df_choices_row <- data.frame(
+              choice_name   = character(1),
+              choice_weight = numeric(1),
+              stringsAsFactors = FALSE)
+            df_choices_row$choice_name <- choice_name
+            df_choices_row$choice_weight <- 0
+            df_choices <- rbind(df_choices,df_choices_row)
+          }
+        }
+        #
         locality_name <- toupper(res$county_totals[[iCountyTotals]]$locality_name)
         if(!exists(locality_name, envir = ht_county_ids, inherits = FALSE))
         {
@@ -995,11 +1015,11 @@ generate.county.csv <- function(base_dir, sid, state_abbr, file_prefix, file_pos
   } # END for(iTimestampFilePostfix in 1:length(file_postfixes))
   df_county_ids <- df_county_ids[order(df_county_ids$county_name),]
   write.csv(x = df_county_ids, file = paste0(csv_path,"/",state_abbr,"_county",".csv"), row.names = FALSE)
-  return (list(ht_county_ids = ht_county_ids, df_county_ids = df_county_ids))
+  return (list(ht_county_ids = ht_county_ids, df_county_ids = df_county_ids, df_choices = df_choices))
 }
 
 generate.county.vote.type.csv <- function(base_dir, sid, state_abbr, file_prefix, file_postfixes,
-                                          ht_county_ids, df_county_ids)
+                                          ht_county_ids, df_county_ids, df_choices)
 {
   # Use primary key {locality_name, geo_id, vote_type} and {votes, bidenj, trumpd, jorgensenj} as the contents
   json_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts")
@@ -1067,6 +1087,22 @@ generate.county.vote.type.csv <- function(base_dir, sid, state_abbr, file_prefix
         #res$county_by_vote_type[[iCountyByVoteType]]$is_geographic       # false
         #res$county_by_vote_type[[iCountyByVoteType]]$votes               # 0
         #res$county_by_vote_type[[iCountyByVoteType]]$is_reporting        # false
+        #
+        new_choices <- names(res$county_by_vote_type[[iCountyByVoteType]]$results)
+        missing_choices_names <- new_choices[!(new_choices %in% df_choices$choice_name)]
+        if(length(missing_choices_names) > 0)
+        {
+          for(choice_name in missing_choices_names)
+          {
+            df_choices_row <- data.frame(
+              choice_name   = character(1),
+              choice_weight = numeric(1),
+              stringsAsFactors = FALSE)
+            df_choices_row$choice_name <- choice_name
+            df_choices_row$choice_weight <- 0
+            df_choices <- rbind(df_choices,df_choices_row)
+          }
+        }
         #
         locality_name <- toupper(res$county_by_vote_type[[iCountyByVoteType]]$locality_name)
         vote_type <- res$county_by_vote_type[[iCountyByVoteType]]$vote_type
@@ -1140,11 +1176,12 @@ generate.county.vote.type.csv <- function(base_dir, sid, state_abbr, file_prefix
   write.csv(x = df_county_vote_type_ids, file = paste0(csv_path,"/",state_abbr,"_county_vote_type",".csv"), row.names = FALSE)
   #
   return (list(ht_county_ids = ht_county_ids, df_county_ids = df_county_ids,
-               ht_vote_type_ids = ht_vote_type_ids, df_vote_type_ids = df_vote_type_ids))
+               ht_vote_type_ids = ht_vote_type_ids, df_vote_type_ids = df_vote_type_ids,
+               df_choices = df_choices))
 }
 
 generate.precinct.csv <- function(base_dir, sid, state_abbr, file_prefix, file_postfixes,
-                                  ht_county_ids, df_county_ids)
+                                  ht_county_ids, df_county_ids, df_choices)
 {
   # Use primary key {locality_name, precinct_id} and {votes, bidenj, trumpd, jorgensenj, other} as the contents
   json_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts")
@@ -1201,7 +1238,22 @@ generate.precinct.csv <- function(base_dir, sid, state_abbr, file_prefix, file_p
         #res$precinct_totals[[iPrecinctTotals]]$votes                       # 992
         #res$precinct_totals[[iPrecinctTotals]]$is_reporting                # true
         #
-        
+        new_choices <- names(res$precinct_totals[[iPrecinctTotals]]$results)
+        missing_choices_names <- new_choices[!(new_choices %in% df_choices$choice_name)]
+        if(length(missing_choices_names) > 0)
+        {
+          for(choice_name in missing_choices_names)
+          {
+            df_choices_row <- data.frame(
+              choice_name   = character(1),
+              choice_weight = numeric(1),
+              stringsAsFactors = FALSE)
+            df_choices_row$choice_name <- choice_name
+            df_choices_row$choice_weight <- 0
+            df_choices <- rbind(df_choices,df_choices_row)
+          }
+        }
+        #
         locality_name <- toupper(res$precinct_totals[[iPrecinctTotals]]$locality_name)
         locality_name__precinct_id <- paste0(locality_name, "|", res$precinct_totals[[iPrecinctTotals]]$precinct_id)
         if(!exists(locality_name__precinct_id, envir = ht_precinct_ids, inherits = FALSE))
@@ -1235,14 +1287,16 @@ generate.precinct.csv <- function(base_dir, sid, state_abbr, file_prefix, file_p
   df_precinct_ids <- df_precinct_ids[order(df_precinct_ids$county_name, df_precinct_ids$precinct_id),]
   write.csv(x = df_precinct_ids, file = paste0(csv_path,"/",state_abbr,"_precinct",".csv"), row.names = FALSE)
   lst_precinct_ids <- list(ht_county_ids = ht_county_ids, df_county_ids = df_county_ids,
-                           ht_precinct_ids = ht_precinct_ids, df_precinct_ids = df_precinct_ids)
+                           ht_precinct_ids = ht_precinct_ids, df_precinct_ids = df_precinct_ids,
+                           df_choices = df_choices)
   return(lst_precinct_ids)
 }
 
 generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_prefix, file_postfixes,
                                             ht_county_ids, df_county_ids,
                                             ht_precinct_ids, df_precinct_ids,
-                                            ht_vote_type_ids, df_vote_type_ids)
+                                            ht_vote_type_ids, df_vote_type_ids,
+                                            df_choices)
 {
   # Use primary key {locality_name, precinct_id, vote_type} and {votes, bidenj, trumpd, jorgensenj, other} as the contents
   json_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts")
@@ -1334,6 +1388,34 @@ generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_pref
         #res$precinct_by_vote_type[[iPrecinctByVoteType]]$locality_fips      # "42003"
         #res$precinct_by_vote_type[[iPrecinctByVoteType]]$is_geographic      # true
         #res$precinct_by_vote_type[[iPrecinctByVoteType]]$votes              # 122
+        #
+        new_choices <- names(res$precinct_by_vote_type[[iPrecinctByVoteType]]$results)
+        missing_choices_names <- new_choices[!(new_choices %in% df_choices$choice_name)]
+        if(length(missing_choices_names) > 0)
+        {
+          for(choice_name in missing_choices_names)
+          {
+            df_choices_row <- data.frame(
+              choice_name   = character(1),
+              choice_weight = numeric(1),
+              stringsAsFactors = FALSE)
+            df_choices_row$choice_name <- choice_name
+            df_choices_row$choice_weight <- 0
+            df_choices <- rbind(df_choices,df_choices_row)
+          }
+        }
+        if(iTimestampFilePostfix == length(file_postfixes))
+        {
+          for(choice_name in df_choices$choice_name)
+          {
+            if(choice_name %in% names(res$precinct_by_vote_type[[iPrecinctByVoteType]]$results))
+            {
+              df_choices$choice_weight[df_choices$choice_name == choice_name] <-
+                df_choices$choice_weight[df_choices$choice_name == choice_name] +
+                res$precinct_by_vote_type[[iPrecinctByVoteType]]$results[[choice_name]]
+            }
+          }
+        }
         #
         locality_name <- toupper(res$precinct_by_vote_type[[iPrecinctByVoteType]]$locality_name)
         precinct_id <- res$precinct_by_vote_type[[iPrecinctByVoteType]]$precinct_id
@@ -1471,7 +1553,8 @@ generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_pref
   df_precinct_vote_type_ids <- df_precinct_vote_type_ids[order(df_precinct_vote_type_ids$county_name,
                                                                df_precinct_vote_type_ids$precinct_id,
                                                                df_precinct_vote_type_ids$vote_type),]
-
+  df_choices <- df_choices[order(-df_choices$choice_weight),]
+  #
   write.csv(x = df_vote_type_ids, file = paste0(csv_path,"/",state_abbr,"_vote_type",".csv"), row.names = FALSE)
   write.csv(x = df_county_ids, file = paste0(csv_path,"/",state_abbr,"_county",".csv"), row.names = FALSE)
   write.csv(x = df_precinct_ids, file = paste0(csv_path,"/",state_abbr,"_precinct",".csv"), row.names = FALSE)
@@ -1480,7 +1563,7 @@ generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_pref
   return (list(ht_county_ids = ht_county_ids, df_county_ids = df_county_ids,
                ht_precinct_ids = ht_precinct_ids, df_precinct_ids = df_precinct_ids,
                ht_vote_type_ids = ht_vote_type_ids, df_vote_type_ids = df_vote_type_ids,
-               time_origin_ms = time_origin_ms))
+               time_origin_ms = time_origin_ms, df_choices = df_choices))
 }
 
 generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_postfixes)
@@ -1550,6 +1633,10 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
     # de_la_fuenter  = numeric(),
     stringsAsFactors = FALSE)
   time_origin_ms <- .Machine$double.xmax
+  df_choices <- data.frame(
+    choice_name   = character(),
+    choice_weight = numeric(),
+    stringsAsFactors = FALSE)
   for(iTimestampFilePostfix in 1:length(file_postfixes))
   {
     str_snapshot_timestamp <- file_postfixes[iTimestampFilePostfix] # e.g. "2020-11-03T23:40:53.084Z" or 1604475653084
@@ -1575,6 +1662,34 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
       for(iPrecincts in 1:length(res$precincts))
       {
         # Use primary key {locality_name, precinct_id, vote_type} and {votes, bidenj, trumpd, jorgensenj, blankenshipd, hawkinsh, de_la_fuenter, other} as the contents
+        #
+        new_choices <- names(res$precincts[[iPrecincts]]$results)
+        missing_choices_names <- new_choices[!(new_choices %in% df_choices$choice_name)]
+        if(length(missing_choices_names) > 0)
+        {
+          for(choice_name in missing_choices_names)
+          {
+            df_choices_row <- data.frame(
+              choice_name   = character(1),
+              choice_weight = numeric(1),
+              stringsAsFactors = FALSE)
+            df_choices_row$choice_name <- choice_name
+            df_choices_row$choice_weight <- 0
+            df_choices <- rbind(df_choices,df_choices_row)
+          }
+        }
+        if(iTimestampFilePostfix == length(file_postfixes))
+        {
+          for(choice_name in df_choices$choice_name)
+          {
+            if(choice_name %in% names(res$precincts[[iPrecincts]]$results))
+            {
+              df_choices$choice_weight[df_choices$choice_name == choice_name] <-
+                df_choices$choice_weight[df_choices$choice_name == choice_name] +
+                res$precincts[[iPrecincts]]$results[[choice_name]]
+            }
+          }
+        }
         #
         if("vote_type" %in% names(res$precincts[[iPrecincts]]))
         {
@@ -1723,7 +1838,8 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
     df_precinct_vote_type_ids$county_name,
     df_precinct_vote_type_ids$precinct_id,
     df_precinct_vote_type_ids$vote_type),]
-
+  df_choices <- df_choices[order(-df_choices$choice_weight),]
+  
   write.csv(x = df_vote_type_ids, file = paste0(csv_path,"/",state_abbr,"_vote_type",".csv"), row.names = FALSE)
   write.csv(x = df_county_ids, file = paste0(csv_path,"/",state_abbr,"_county",".csv"), row.names = FALSE)
   write.csv(x = df_precinct_ids, file = paste0(csv_path,"/",state_abbr,"_precinct",".csv"), row.names = FALSE)
@@ -1736,7 +1852,7 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
     ht_precinct_ids = ht_precinct_ids, df_precinct_ids = df_precinct_ids,
     df_county_vote_type_ids = df_county_vote_type_ids,
     df_precinct_vote_type_ids = df_precinct_vote_type_ids,
-    time_origin_ms = time_origin_ms))
+    time_origin_ms = time_origin_ms, df_choices = df_choices))
   
   #
   # NC:
@@ -1795,7 +1911,8 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
 }
 
 generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abbr,file_prefix,
-                                        file_postfixes, ht_vote_type_ids, ht_county_ids, ht_precinct_ids)
+                                        file_postfixes, ht_vote_type_ids, ht_county_ids, ht_precinct_ids,
+                                        df_choices)
 {
   # TBD: generate an dataframe with "choices_names" (e.g. c("trumpd", "bidenj", etc.)) in the earlier functions, an pass it to this one!!!
   # for each "choices_names", compute statewide totals on the precinct level. The purpose is to sort these columns in decreasing order.
