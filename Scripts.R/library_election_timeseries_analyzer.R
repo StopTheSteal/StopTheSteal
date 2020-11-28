@@ -96,7 +96,7 @@ list_file_prefixes <- list(
   MI = "MIGeneralConcatenator-",
   NC = "NCGeneral-",
   PA = "PAGeneralConcatenator-"
-)
+  )
 
 list_file_postfixes <- list(
   FL = c(
@@ -2006,3 +2006,37 @@ generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abb
 }
 
 ######################################################################################################
+
+generate.rds.from.csv <- function(base_dir, state_abbr, bool.save.state = FALSE)
+{
+  csv_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/csv")
+  rds_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/rds")
+
+  array_file_postfixes <- c(
+    "_vote_type",
+    "_county",
+    "_county_vote_type",
+    "_precinct",
+    "_precinct_vote_type",
+    "_precinct_vote_type_count_ts"
+  )
+
+  if(!dir.exists(rds_path))
+  {
+    dir.create(rds_path)
+  }
+  
+  if(bool.save.state)
+  {
+    df <- read.csv(file = paste0(csv_path,"/","state",".csv"))
+    saveRDS(df, file = paste0(rds_path,"/","state",".rds"))
+    # df_clone <- readRDS(file = paste0(rds_path,"/","state",".rds"))
+  }
+  
+  for(iPosfixIndex in 1:length(array_file_postfixes))
+  {
+    df <- read.csv(file = paste0(csv_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".csv"))
+    saveRDS(df, file = paste0(rds_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".rds"))
+    # df_clone <- readRDS(file = paste0(rds_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".rds"))
+  }
+}

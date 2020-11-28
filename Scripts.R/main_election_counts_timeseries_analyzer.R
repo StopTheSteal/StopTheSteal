@@ -21,10 +21,11 @@ str.input.file.path <- working_dir
 #setwd(working_dir)
 source("library_election_timeseries_analyzer.R")
 
-bool.download.json       <- FALSE # set it to TRUE to download the JSON dataset and overwrite the existing JSON dataset.
-bool.convert.json.to.csv <- TRUE  # set it to TRUE to convert the existing (downloaded) JSON dataset into CSV dataset.
+bool.download.json       <- FALSE # set it to TRUE to download the JSON data set and overwrite the existing JSON data set.
+bool.convert.json.to.csv <- TRUE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
 negligible.choice.fraction.upper.threshold <- 0.01 # all election "choices" with votes fraction below this
                                                    # threshold are merged into "votes_others" choice.
+bool.convert.csv.to.rds  <- TRUE
 
 if(bool.download.json)
 {
@@ -165,12 +166,17 @@ if(bool.convert.json.to.csv)
 } # END if(bool.convert.json.to.csv)
 
 ##########################################################################################################
-#
-# TBD: save all "csv" files as "Rda" files. Then use "Rda" files for the subsequent statistical analysis.
-#
-# save(foo,file="data.Rda")
-# load("data.Rda")
-#
+
+if(bool.convert.csv.to.rds)
+{
+  # Save all "csv" files as "rds" files. Then use "rds" files for the subsequent statistical analysis.
+  for(iStateIndex in 1:length(arrStateAbbrs))
+  {
+    state_abbr <- arrStateAbbrs[iStateIndex]
+    generate.rds.from.csv(base_dir = base_dir, state_abbr = state_abbr, bool.save.state = (iStateIndex == 1))
+  }
+} # END if(bool.convert.csv.to.rds)
+
 ##########################################################################################################
 #
 # Summary of Tasks:
