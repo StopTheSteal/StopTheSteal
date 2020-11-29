@@ -226,9 +226,12 @@ if(bool.convert.csv.to.rds)
 
 if(bool.produce.plots)
 {
+  pdf_output_path <- paste0(base_dir,"/output/pdf")
+  pdf(file=paste0(pdf_output_path,"/states.pdf"), width=11, height=8.5, paper="special")
   for(iStateIndex in 1:length(arrStateAbbrs))
   {
     state_abbr <- arrStateAbbrs[iStateIndex]
     produce.plots(base_dir = base_dir, state_abbr = state_abbr, use.csv = FALSE)
   }
+  dev.off()
 }
