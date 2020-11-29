@@ -16,7 +16,7 @@ sa <- c("AK","AR","CO","DE","FL","GA","HI","KY","LA","MI","MN","MT","NE","NM","N
 pc <- c(   1,   1,   1,   1,   2,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   1,   1,   2,   1,   1,   1,   1)
 pv <- c("General-", "GeneralConcatenator-")
 i <- 19 # for all i | 1 <= i <= length(sa)
-sTimeStart <- "2020-11-04T00:00:00.000Z" # set around 11/03/2020
+sTimeStart <- "2020-11-04T00:00:14.000Z" # set around 11/03/2020
 sTimeEnd   <- "2020-11-04T00:01:00.000Z"
 numTimeStart <- as.numeric(strptime(sTimeStart,"%Y-%m-%dT%H:%M:%OSZ"))*1000.0 + 0.001
 numTimeEnd   <- as.numeric(strptime(sTimeEnd,  "%Y-%m-%dT%H:%M:%OSZ"))*1000.0 + 0.001
@@ -40,9 +40,15 @@ while(numTimeCurr <= numTimeEnd)
   print(paste0("Processing '", sa[i], "' in a batch of size ", length(json_urls),
                " from '", ts0, "' with increments ", intTimeIncrementMs, " ms ..."))
   start_time  <- Sys.time()
+  # If the timeout is exceeded in "httr::http_error", the following fatal error occurs:
+  #
+  # Error in curl::curl_fetch_memory(url, handle = handle) : 
+  # Timeout was reached: [static01.nyt.com] Operation timed out after 120000 milliseconds with
+  # 0 out of 0 bytes received
+  #
   json_urls_exist_curr <- json_urls[!sapply(X=json_urls, httr::http_error,
                                             config(followlocation = 0L), USE.NAMES = FALSE,
-                                            timeout = 10, terminate_on_success = FALSE)]
+                                            timeout = 120, terminate_on_success = FALSE)]
   end_time <- Sys.time()
   print(paste0("Completed in ", round(difftime(end_time, start_time, units = "secs"),3), " seconds."))
   print(json_urls_exist_curr)
