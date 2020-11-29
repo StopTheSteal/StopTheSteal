@@ -4,12 +4,13 @@ gc()
 options(digits=22)
 options(digits.secs=3)
 
-list.of.packages <- c("jsonlite", "httr")
+list.of.packages <- c("jsonlite", "httr", "caroline")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
 library("jsonlite")
 library("httr")
+library("caroline")
 
 base_dir <- getwd()
 if(!endsWith(base_dir,"StopTheSteal/Scripts.R"))
@@ -22,10 +23,11 @@ str.input.file.path <- working_dir
 source("library_election_timeseries_analyzer.R")
 
 bool.download.json       <- FALSE # set it to TRUE to download the JSON data set and overwrite the existing JSON data set.
-bool.convert.json.to.csv <- TRUE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
+bool.convert.json.to.csv <- FALSE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
 negligible.choice.fraction.upper.threshold <- 0.01 # all election "choices" with votes fraction below this
                                                    # threshold are merged into "votes_others" choice.
-bool.convert.csv.to.rds  <- TRUE
+bool.convert.csv.to.rds  <- FALSE
+bool.produce.plots       <- TRUE
 
 if(bool.download.json)
 {
@@ -221,3 +223,12 @@ if(bool.convert.csv.to.rds)
 #       may point to election fraud ("ballot stuffing").
 #
 ##########################################################################################################
+
+if(bool.produce.plots)
+{
+  for(iStateIndex in 1:length(arrStateAbbrs))
+  {
+    state_abbr <- arrStateAbbrs[iStateIndex]
+    produce.plots(base_dir = base_dir, state_abbr = state_abbr, use.csv = FALSE)
+  }
+}

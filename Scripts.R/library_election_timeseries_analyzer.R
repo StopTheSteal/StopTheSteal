@@ -2040,3 +2040,126 @@ generate.rds.from.csv <- function(base_dir, state_abbr, bool.save.state = FALSE)
     # df_clone <- readRDS(file = paste0(rds_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".rds"))
   }
 }
+
+######################################################################################################
+
+produce.plots <- function(base_dir, state_abbr, use.csv = FALSE)
+{
+  csv_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/csv")
+  rds_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/rds")
+  pdf_output_path <- paste0(base_dir,"/output/pdf")
+  csv_output_path <- paste0(base_dir,"/output/csv")
+  
+  if(use.csv)
+  {
+    df_state <- read.csv(file = paste0(csv_path,"/","state",".csv"))
+    df_vote_type <- read.csv(file = paste0(csv_path,"/",state_abbr,"_vote_type",".csv"))
+    df_county <- read.csv(file = paste0(csv_path,"/",state_abbr,"_county",".csv"))
+    df_county_vote_type <- read.csv(file = paste0(csv_path,"/",state_abbr,"_county_vote_type",".csv"))
+    df_precinct <- read.csv(file = paste0(csv_path,"/",state_abbr,"_precinct",".csv"))
+    df_precinct_vote_type <- read.csv(file = paste0(csv_path,"/",state_abbr,"_precinct_vote_type",".csv"))
+    df_precinct_vote_type_count_ts <- read.csv(file = paste0(csv_path,"/",state_abbr,"_precinct_vote_type_count_ts",".csv"))
+  } else
+  {
+    df_state <- readRDS(file = paste0(rds_path,"/","state",".rds"))
+    df_vote_type <- readRDS(file = paste0(rds_path,"/",state_abbr,"_vote_type",".rds"))
+    df_county <- readRDS(file = paste0(rds_path,"/",state_abbr,"_county",".rds"))
+    df_county_vote_type <- readRDS(file = paste0(rds_path,"/",state_abbr,"_county_vote_type",".rds"))
+    df_precinct <- readRDS(file = paste0(rds_path,"/",state_abbr,"_precinct",".rds"))
+    df_precinct_vote_type <- readRDS(file = paste0(rds_path,"/",state_abbr,"_precinct_vote_type",".rds"))
+    df_precinct_vote_type_count_ts <- readRDS(file = paste0(rds_path,"/",state_abbr,"_precinct_vote_type_count_ts",".rds"))
+  }
+  
+  state_name <- df_state$state_name[df_state$state_abbr == state_abbr]
+  time_origin_ms <- df_state$time_origin_ms[df_state$state_abbr == state_abbr]
+
+  column_names_resid_votes <-
+    colnames(df_precinct_vote_type_count_ts)[startsWith(colnames(df_precinct_vote_type_count_ts),"votes_")]
+  column_names_resid_votes <-
+    column_names_resid_votes[!(column_names_resid_votes %in% c("votes_trumpd", "votes_bidenj", "votes_others"))]
+  if(!("votes_others" %in% colnames(df_precinct_vote_type_count_ts)))
+  {
+    df_precinct_vote_type_count_ts[,"votes_others"] <- 0
+  }
+  if(length(column_names_resid_votes) > 0)
+  {
+    for(iResidColIndex in 1:length(column_names_resid_votes))
+    {
+      df_precinct_vote_type_count_ts[,"votes_others"] <-
+        df_precinct_vote_type_count_ts[,"votes_others"] +
+        df_precinct_vote_type_count_ts[,c(column_names_resid_votes[iResidColIndex])]
+      df_precinct_vote_type_count_ts[,c(column_names_resid_votes[iResidColIndex])] <- NULL
+    }
+  }
+  
+  if(state_abbr %in% c("FL", "MI", "GA", "NC", "PA"))
+  {
+    df_precinct_vote_type_count_ts.by_time <- groupBy(
+      df = df_precinct_vote_type_count_ts, by = "time_offset_ms",
+      clmns       = c("time_offset_ms", "sid", "tally", "votes_bidenj", "votes_trumpd", "votes_others"),
+      aggregation = c("min",            "min", "sum",   "sum",          "sum",          "sum"),
+      full.names = FALSE, na.rm = TRUE)
+    df_precinct_vote_type_count_ts.by_time <- df_precinct_vote_type_count_ts.by_time[
+      order(df_precinct_vote_type_count_ts.by_time$time_offset_ms),]
+    #
+    if(state_abbr == "FL")
+    {
+      xlims <- c(1.84e8, 2.0e8)
+    } else if(state_abbr == "GA")
+    {
+      xlims <- c(2.7e8, 6.0e8)
+    } else if(state_abbr == "MI")
+    {
+      xlims <- c(0, 1.2e8)
+    } else if(state_abbr == "NC")
+    {
+      xlims <- c(3.9e8, 4.1e8)
+    } else if(state_abbr == "PA")
+    {
+      xlims <- c(0, 1.2e8)
+    } else
+    {
+      xlims <- c(0, max(df_precinct_vote_type_count_ts.by_time$time_offset_ms))
+    }
+    ylims <- c(0, max(df_precinct_vote_type_count_ts.by_time$tally))
+    plot(x = df_precinct_vote_type_count_ts.by_time$time_offset_ms,
+         y = df_precinct_vote_type_count_ts.by_time$tally,
+         main = paste0("Tally for ", state_name, " (", state_abbr, ")"),
+         xlab = "Time Offset (ms)", ylab = "Vote Tally Count",
+         xlim = xlims, ylim <- ylims,
+         pch = 20, lty = c("solid"), type = "b", col = "black", lwd = 2,
+         cex = 1.5, cex.axis = 1.7, cex.lab = 1.7, cex.sub = 2, cex.main = 2)
+    #
+    ylims <- c(0, max(df_precinct_vote_type_count_ts.by_time$votes_bidenj,
+                      df_precinct_vote_type_count_ts.by_time$votes_trumpd,
+                      df_precinct_vote_type_count_ts.by_time$votes_others))
+    plot(x = df_precinct_vote_type_count_ts.by_time$time_offset_ms,
+         y = df_precinct_vote_type_count_ts.by_time$votes_bidenj,
+         main = paste0("Votes for ", state_name, " (", state_abbr, ")"),
+         xlab = "Time Offset (ms)", ylab = "Vote Count for Choices",
+         xlim = xlims, ylim <- ylims,
+         pch = 20, lty = c("solid"), type = "b", col = "darkblue", lwd = 2,
+         cex = 1.5, cex.axis = 1.7, cex.lab = 1.7, cex.sub = 2, cex.main = 2)
+    lines(x = df_precinct_vote_type_count_ts.by_time$time_offset_ms,
+          y = df_precinct_vote_type_count_ts.by_time$votes_trumpd,
+          pch = 20, lty = c("solid"), type = "b", col = "red", lwd = 2,
+          xaxt="n", yaxt ="n")
+    lines(x = df_precinct_vote_type_count_ts.by_time$time_offset_ms,
+          y = df_precinct_vote_type_count_ts.by_time$votes_others,
+          pch = 20, lty = c("solid"), type = "b", col = "green", lwd = 2,
+          xaxt="n", yaxt ="n")
+    abline(v=5e7, col=c("grey"),lwd=c(2),lty=c("dotted")) # dashed
+    abline(h=0, col=c("black"),lwd=c(2),lty=c("solid"))
+    legend.line1 <- "Biden"
+    legend.line2 <- "Trump"
+    legend.line3 <- "Others"
+    legend.line4 <- "Hour start"
+    legend(x=xlims[1] + (xlims[2] - xlims[1])*2/3, y=ylims[1] + (ylims[2] - ylims[1])/3,
+           legend=c(legend.line1,legend.line2,legend.line3,legend.line4),
+           merge=FALSE, lwd=c(2), cex=c(1.3),
+           col=c("darkblue","red","green","grey"),
+           lty=c("solid","solid","solid","dotted"))
+    #grid(nx = 10, ny = 10, col="grey", lwd = 1)
+  }
+  # ...
+}
