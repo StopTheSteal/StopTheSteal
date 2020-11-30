@@ -5,15 +5,22 @@ import time
 from itertools import repeat
 
 
+scriptFilePath = os.path.dirname(__file__)
+scriptsPath = os.path.dirname(scriptFilePath)
+analyticsPath = os.path.dirname(scriptsPath)
+projectPath = os.path.dirname(analyticsPath)
+precinctsJsonPath = os.path.join(projectPath,'Data/Precincts/JSON')
+
+
 def downloadFile(url: str, downloadFolder: str = None, retries: int = 0):
     fileName = url.rsplit('/', 1)[1]
     fileName = fileName.replace(':', '_')
     if downloadFolder:
-        folderExists = os.path.exists(f'./{downloadFolder}') and \
-            os.path.isdir(f'./{downloadFolder}')
+        folderExists = os.path.exists(os.path.join(precinctsJsonPath,downloadFolder)) and \
+            os.path.isdir(os.path.join(precinctsJsonPath,downloadFolder))
         if folderExists == False:
-            os.mkdir(f'./{downloadFolder}')
-        fileName = f'./{downloadFolder}/{fileName}'
+            os.mkdir(os.path.join(precinctsJsonPath,downloadFolder))
+        fileName = f'{os.path.join(precinctsJsonPath,downloadFolder)}/{fileName}'
     try:
         resp = requests.get(url, allow_redirects=False)
     except Exception as exc:
@@ -38,10 +45,12 @@ def downloadFile(url: str, downloadFolder: str = None, retries: int = 0):
 
 
 if __name__ == '__main__':
-    downloadList = {'GA': 'nyt-NCGeneral.txt',
-                    'MI': 'nyt-MIGeneral.txt',
-                    'NC': 'nyt-NCGeneral.txt',
-                    'PA': 'nyt-PAGeneral.txt'}
+    downloadList = {'FL': f'{precinctsJsonPath}/nyt-FLGeneral.txt',
+                    'GA': f'{precinctsJsonPath}/nyt-GAGeneral.txt',
+                    'MI': f'{precinctsJsonPath}/nyt-MIGeneral.txt',
+                    'NC': f'{precinctsJsonPath}/nyt-NCGeneral.txt',
+                    'NE': f'{precinctsJsonPath}/nyt-NEGeneral.txt',
+                    'PA': f'{precinctsJsonPath}/nyt-PAGeneral.txt'}
     for state in downloadList:
         print(downloadList[state])
         with open(downloadList[state], 'r') as file:

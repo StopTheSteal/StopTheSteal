@@ -6,9 +6,12 @@ import re
 from datetime import datetime
 
 priorValues = {}
-scriptPath = os.path.dirname(__file__)
-precinctsJsonPath = os.path.join(os.path.dirname(scriptPath),'Data/Precincts/JSON')
-precinctsCsvPath = os.path.join(os.path.dirname(scriptPath),'Data/Precincts/CSV')
+scriptFilePath = os.path.dirname(__file__)
+scriptsPath = os.path.dirname(scriptFilePath)
+analyticsPath = os.path.dirname(scriptsPath)
+projectPath = os.path.dirname(analyticsPath)
+precinctsJsonPath = os.path.join(projectPath,'Data/Precincts/JSON')
+precinctsCsvPath = os.path.join(projectPath,'Data/Precincts/CSV')
 
 
 def BuildCompoundKey(*keys: str) -> str:
