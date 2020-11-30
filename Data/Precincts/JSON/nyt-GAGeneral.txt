@@ -173,3 +173,4 @@ https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/GAG
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/GAGeneral-2020-11-11T19:09:28.636Z.json
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/GAGeneral-2020-11-11T21:10:30.230Z.json
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/GAGeneral-2020-11-11T22:32:34.439Z.json
+https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/GAGeneral-latest.json

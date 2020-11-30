@@ -135,3 +135,4 @@ https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/MIG
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/MIGeneralConcatenator-2020-11-09T18:11:26.548Z.json
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/MIGeneralConcatenator-2020-11-10T15:30:00.413Z.json
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/MIGeneralConcatenator-2020-11-10T19:13:08.066Z.json
+https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/MIGeneralConcatenator-latest.json

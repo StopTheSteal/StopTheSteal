@@ -72,3 +72,4 @@ https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/NCG
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/NCGeneral-2020-11-11T02:49:14.995Z.json
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/NCGeneral-2020-11-11T16:30:55.800Z.json
 https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/NCGeneral-2020-11-11T21:21:55.407Z.json
+https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts/NCGeneral-latest.json
