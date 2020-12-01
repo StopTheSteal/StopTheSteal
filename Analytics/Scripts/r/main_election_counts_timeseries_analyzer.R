@@ -13,7 +13,7 @@ library("httr")
 library("caroline")
 
 base_dir <- getwd()
-if(!endsWith(base_dir,"StopTheSteal/Scripts.R"))
+if(!endsWith(base_dir,"StopTheSteal/Analytics/Scripts/r"))
 {
   stop(paste0("Invalid working directory '",base_dir,"'. Must end with 'StopTheSteal/Scripts.R'."))
 }
