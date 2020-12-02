@@ -1,0 +1,7 @@
+"sid","cid","vid","county_name","vote_type","county_fips"
+4,1,1,"KENT","absentee","unknown"
+4,1,2,"KENT","electionday","unknown"
+4,2,1,"NEW CASTLE","absentee","unknown"
+4,2,2,"NEW CASTLE","electionday","unknown"
+4,3,1,"SUSSEX","absentee","unknown"
+4,3,2,"SUSSEX","electionday","unknown"

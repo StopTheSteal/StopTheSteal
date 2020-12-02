@@ -86,19 +86,68 @@
 
 url_template <- "https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts"
 file_extension <- ".json"
+str_latest_snapshot_timestamp <- "2020-12-01T11:59:59.999Z"
 
-arrStateAbbrs <- c("FL", "GA", "MI", "NC", "PA")
-arrStateNames <- c("Florida", "Georgia", "Michigan", "North Carolina", "Pennsylvania")
+arrStateAbbrs <- c("AK","AR","CO","DE","FL","GA","HI","KY","LA","MI","MN","MT","NE","NM","NC","ND","OK","PA","SC","SD","WA","WV")
+arrStateNames <- c(
+  "Alaska", # AK
+  "Arkansas", # AR
+  "Colorado", # CO
+  "Delaware", # DE
+  "Florida", # FL
+  "Georgia", # GA
+  "Hawaii", # HI
+  "Kentucky", # KY
+  "Louisiana", # LA
+  "Michigan", # MI
+  "Minnesota", # MN
+  "Montana", # MT
+  "Nebraska", # NE
+  "New Mexico", # NM
+  "North Carolina", # NC
+  "North Dakota", # ND
+  "Oklahoma", # OK
+  "Pennsylvania", # PA
+  "South Carolina", # SC
+  "South Dakota", # SD
+  "Washington", # WA
+  "West Virginia" # WV
+  )
 
 list_file_prefixes <- list(
+  AK = "AKGeneral-",
+  AR = "ARGeneral-",
+  CO = "COGeneral-",
+  DE = "DEGeneral-",
   FL = "FLGeneralConcatenator-",
   GA = "GAGeneral-",
+  HI = "HIGeneral-",
+  KY = "KYGeneral-",
+  LA = "LAGeneral-",
   MI = "MIGeneralConcatenator-",
+  MN = "MNGeneral-",
+  MT = "MTGeneral-",
+  NE = "NEGeneral-",
+  NM = "NMGeneral-",
   NC = "NCGeneral-",
-  PA = "PAGeneralConcatenator-"
+  ND = "NDGeneral-",
+  OK = "OKGeneral-",
+  PA = "PAGeneralConcatenator-",
+  SC = "SCGeneral-",
+  SD = "SDGeneral-",
+  WA = "WAGeneral-",
+  WV = "WVGeneral-"
   )
 
 list_file_postfixes <- list(
+  AK = c(
+    "latest"),
+  AR = c(
+    "latest"),
+  CO = c(
+    "latest"),
+  DE = c(
+    "latest"),
   FL = c(
     "2020-11-01T20:23:41.048Z",
     "2020-11-03T19:10:34.753Z",
@@ -442,6 +491,12 @@ list_file_postfixes <- list(
     "2020-11-11T21:10:30.230Z",
     "2020-11-11T22:32:34.439Z",
     "latest"),
+  HI = c(
+    "latest"),
+  KY = c(
+    "latest"),
+  LA = c(
+    "latest"),
   MI = c(
     "2020-11-03T19:39:31.715Z",
     "2020-11-03T23:01:38.141Z",
@@ -581,6 +636,14 @@ list_file_postfixes <- list(
     "2020-11-10T15:30:00.413Z",
     "2020-11-10T19:13:08.066Z",
     "latest"),
+  MN = c(
+    "latest"),
+  MT = c(
+    "latest"),
+  NE = c(
+    "latest"),
+  NM = c(
+    "latest"),
   NC = c(
     "2020-10-30T13:19:01.425Z",
     "2020-11-04T01:20:19.239Z",
@@ -656,6 +719,10 @@ list_file_postfixes <- list(
     "2020-11-11T02:49:14.995Z",
     "2020-11-11T16:30:55.800Z",
     "2020-11-11T21:21:55.407Z",
+    "latest"),
+  ND = c(
+    "latest"),
+  OK = c(
     "latest"),
   PA = c(
     "2020-11-03T19:39:48.428Z",
@@ -875,6 +942,14 @@ list_file_postfixes <- list(
     "2020-11-11T03:16:00.804Z",
     "2020-11-11T20:31:19.396Z",
     "2020-11-11T21:50:46.218Z",
+    "latest"),
+  SC = c(
+    "latest"),
+  SD = c(
+    "latest"),
+  WA = c(
+    "latest"),
+  WV = c(
     "latest")
 )
 
@@ -1361,8 +1436,11 @@ generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_pref
     if(str_snapshot_timestamp != "latest")
     {
       num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      time_origin_ms <- ifelse(num_snapshot_timestamp_ms < time_origin_ms, num_snapshot_timestamp_ms, time_origin_ms)
+    } else
+    {
+      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
     }
+    time_origin_ms <- ifelse(num_snapshot_timestamp_ms < time_origin_ms, num_snapshot_timestamp_ms, time_origin_ms)
     #
     json_postfix_out <- file_postfixes[iTimestampFilePostfix]
     json_postfix_out <- gsub("T","_", json_postfix_out)
@@ -1551,6 +1629,12 @@ generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_pref
       } # END for(iPrecinctByVoteType in 1:length(res$precinct_by_vote_type))
     } # END if(length(res$precinct_by_vote_type) > 0)
   } # END for(iTimestampFilePostfix in 1:length(file_postfixes))
+
+  if(time_origin_ms == .Machine$double.xmax)
+  {
+    time_origin_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+  }
+  
   #
   df_vote_type_ids <- df_vote_type_ids[order(df_vote_type_ids$vote_type),]
   df_county_ids <- df_county_ids[order(df_county_ids$county_name),]
@@ -1648,8 +1732,11 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
     if(str_snapshot_timestamp != "latest")
     {
       num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      time_origin_ms <- ifelse(num_snapshot_timestamp_ms < time_origin_ms, num_snapshot_timestamp_ms, time_origin_ms)
+    } else
+    {
+      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
     }
+    time_origin_ms <- ifelse(num_snapshot_timestamp_ms < time_origin_ms, num_snapshot_timestamp_ms, time_origin_ms)
     #
     json_postfix_out <- file_postfixes[iTimestampFilePostfix]
     json_postfix_out <- gsub("T","_", json_postfix_out)
@@ -1834,6 +1921,11 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
     } # END if(length(res$precincts) > 0)
   } # END for(iTimestampFilePostfix in 1:length(file_postfixes))
 
+  if(time_origin_ms == .Machine$double.xmax)
+  {
+    time_origin_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+  }
+  
   df_county_ids <- df_county_ids[order(df_county_ids$county_name),]
   df_precinct_ids <- df_precinct_ids[order(
     df_precinct_ids$county_name,
@@ -1883,11 +1975,17 @@ generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abb
       num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
     } else
     {
-      str_snapshot_timestamp_prev <- file_postfixes[iTimestampFilePostfix - 1]
-      str_snapshot_timestamp_prev_prev <- file_postfixes[iTimestampFilePostfix - 2]
-      num_snapshot_timestamp_ms_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      num_snapshot_timestamp_ms_prev_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      num_snapshot_timestamp_ms <- num_snapshot_timestamp_ms_prev + (num_snapshot_timestamp_ms_prev - num_snapshot_timestamp_ms_prev_prev)
+      #if(length(file_postfixes) > 1)
+      #{
+      #  str_snapshot_timestamp_prev <- file_postfixes[iTimestampFilePostfix - 1]
+      #  str_snapshot_timestamp_prev_prev <- file_postfixes[iTimestampFilePostfix - 2]
+      #  num_snapshot_timestamp_ms_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      #  num_snapshot_timestamp_ms_prev_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      #  num_snapshot_timestamp_ms <- num_snapshot_timestamp_ms_prev + (num_snapshot_timestamp_ms_prev - num_snapshot_timestamp_ms_prev_prev)
+      #} else
+      #{
+        num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      #}
     }
     time_offset_ms <- num_snapshot_timestamp_ms - time_origin_ms
     #

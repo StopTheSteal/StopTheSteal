@@ -23,10 +23,10 @@ str.input.file.path <- working_dir
 source("library_election_timeseries_analyzer.R")
 
 bool.download.json       <- FALSE # set it to TRUE to download the JSON data set and overwrite the existing JSON data set.
-bool.convert.json.to.csv <- FALSE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
-negligible.choice.fraction.upper.threshold <- 0.01 # all election "choices" with votes fraction below this
+bool.convert.json.to.csv <- TRUE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
+negligible.choice.fraction.upper.threshold <- 0.05 # all election "choices" with votes fraction below this
                                                    # threshold are merged into "votes_others" choice.
-bool.convert.csv.to.rds  <- FALSE
+bool.convert.csv.to.rds  <- TRUE
 bool.produce.plots       <- TRUE
 
 if(bool.download.json)
@@ -115,7 +115,8 @@ if(bool.convert.json.to.csv)
       time_origin_ms <- lst_precinct_vote_type_ids[["time_origin_ms"]]
       df_choices <- lst_precinct_vote_type_ids[["df_choices"]]
       rm(lst_precinct_vote_type_ids)
-    } else if (state_abbr %in% c("NC", "MI", "GA"))
+    } else if (state_abbr %in% c("NC", "MI", "GA",
+                                 "AK","AR","CO","DE","HI","KY","LA","MN","MT","NE","NM","ND","OK","SC","SD","WA","WV"))
     {
       lst_precinct_ids <- generate.precinct.csv2(base_dir = base_dir,
                                                  sid = sid,
@@ -162,7 +163,7 @@ if(bool.convert.json.to.csv)
                                 negligible.choice.fraction.upper.threshold = negligible.choice.fraction.upper.threshold)
   } # END for(sid in 1:length(arrStateAbbrs))
   #
-  df_state_ids <- df_state_ids[order(df_state_ids$state_abbr),]
+  df_state_ids <- df_state_ids[order(df_state_ids$state_name),]
   csv_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/csv")
   write.csv(x = df_state_ids, file = paste0(csv_path,"/","state",".csv"), row.names = FALSE)
 } # END if(bool.convert.json.to.csv)
@@ -231,7 +232,10 @@ if(bool.produce.plots)
   for(iStateIndex in 1:length(arrStateAbbrs))
   {
     state_abbr <- arrStateAbbrs[iStateIndex]
-    produce.plots(base_dir = base_dir, state_abbr = state_abbr, use.csv = FALSE)
+    if(length(list_file_postfixes[[state_abbr]]) > 1)
+    {
+      produce.plots(base_dir = base_dir, state_abbr = state_abbr, use.csv = FALSE)
+    }
   }
   dev.off()
 }

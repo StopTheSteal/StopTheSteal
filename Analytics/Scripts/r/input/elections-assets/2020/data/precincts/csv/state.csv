@@ -1,6 +1,23 @@
 "sid","state_abbr","state_name","time_origin_ms"
-1,"FL","Florida",1604291021048
-2,"GA","Georgia",1604207645096
-3,"MI","Michigan",1604461171715
-4,"NC","North Carolina",1604089141425
-5,"PA","Pennsylvania",1604461188428
+1,"AK","Alaska",1606852799999
+2,"AR","Arkansas",1606852799999
+3,"CO","Colorado",1606852799999
+4,"DE","Delaware",1606852799999
+5,"FL","Florida",1604291021048
+6,"GA","Georgia",1604207645096
+7,"HI","Hawaii",1606852799999
+8,"KY","Kentucky",1606852799999
+9,"LA","Louisiana",1606852799999
+10,"MI","Michigan",1604461171715
+11,"MN","Minnesota",1606852799999
+12,"MT","Montana",1606852799999
+13,"NE","Nebraska",1606852799999
+14,"NM","New Mexico",1606852799999
+15,"NC","North Carolina",1604089141425
+16,"ND","North Dakota",1606852799999
+17,"OK","Oklahoma",1606852799999
+18,"PA","Pennsylvania",1604461188428
+19,"SC","South Carolina",1606852799999
+20,"SD","South Dakota",1606852799999
+21,"WA","Washington",1606852799999
+22,"WV","West Virginia",1606852799999

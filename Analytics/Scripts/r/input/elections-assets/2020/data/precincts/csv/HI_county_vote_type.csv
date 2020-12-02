@@ -1,0 +1,5 @@
+"sid","cid","vid","county_name","vote_type","county_fips"
+7,1,1,"HAWAII","total","15001"
+7,2,1,"HONOLULU","total","15003"
+7,3,1,"KAUAI","total","15007"
+7,4,1,"MAUI","total","15009"
