@@ -3,12 +3,13 @@ gc()
 
 options(digits=22)
 
-list.of.packages <- c("httr", "lubridate")
+list.of.packages <- c("httr", "lubridate") # "Cairo"
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
-library(httr)
-library(lubridate)
+library("httr")
+library("lubridate")
+#library("Cairo")
 source("library_election_timeseries_analyzer.R")
 
 bool.download.json <- FALSE
@@ -57,6 +58,8 @@ if(bool.generate.pdf)
     {
       url_string <- "senate.json"
     }
+    #CairoPDF(file=paste0(pdf_output_path,"/",race,"_race.pdf"), width=11, height=8.5, paper="special")
+    #cairo_pdf(file=paste0(pdf_output_path,"/",race,"_race.pdf"), width=11, height=8.5)
     pdf(file=paste0(pdf_output_path,"/",race,"_race.pdf"), width=11, height=8.5, paper="special")
     #for(state_index in 1:length(president_state_strings))
     state_index <- 50 # state_name = "wisconsin"
@@ -68,6 +71,21 @@ if(bool.generate.pdf)
         working_dir = working_dir, state_name = state_name, race = race)
       if(!is.null(df_election_fractions))
       {
+        if(FALSE)
+        {
+          n <- nrow(df_election_fractions)
+          int_min_time <- df_election_fractions$sec_offset[1]
+          int_max_time <- df_election_fractions$sec_offset[n]
+          options(digits.secs = 0)
+          str_min_time <- format(as.POSIXct(int_min_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
+          str_max_time <- format(as.POSIXct(int_max_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
+          # Sliding windows:
+          # Size1 <- 1 * (2/3)^0 = 1;    Shift1 <- (2/3)^0 * 1/2 = 1/2;
+          # Size2 <- 1 * (2/3)^1 = 2/3;  Shift2 <- (2/3)^1 * 1/2 = 1/3;
+          # Size3 <- 1 * (2/3)^2 = 4/9;  Shift3 <- (2/3)^2 * 1/2 = 2/9;
+          # Size4 <- 1 * (2/3)^3 = 8/27; Shift3 <- (2/3)^3 * 1/2 = 4/27;
+          # ... until SizeN * (t_max - t_min) < threshold = 3600 * 3 seconds
+        }
         #min_time = "2020-11-03T21:00:00Z"
         #max_time = "2020-11-05T00:00:00Z"
         min_time = "2020-11-04T09:00:00Z"

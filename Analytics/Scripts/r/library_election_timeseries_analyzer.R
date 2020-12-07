@@ -2797,8 +2797,12 @@ plot.batch.impact.statistic <- function(df_election_fractions, xlims,
   title(xlab=bquote(bold('Code source: ') ~ italic(.(my_github_base))),
         line=3.5, cex.lab=0.75, font.lab=3, col.lab = "darkgreen")
   options(digits.secs = 3)
+  min_time <- gsub("\\.",":",format(as.POSIXct(xlims[1], origin = "1970-01-01"), "%Y:%m:%d:%H:%M:%OS"))
+  max_time <- gsub("\\.",":",format(as.POSIXct(xlims[2], origin = "1970-01-01"), "%Y:%m:%d:%H:%M:%OS"))
   current_time <- gsub("\\.",":",format(Sys.time(), "%Y:%m:%d:%H:%M:%OS"))
-  title(xlab=bquote(bold('Current time: ') ~ bold(.(current_time))),
+  title(xlab=bquote(bold('Current time: ') ~ italic(.(current_time)) ~
+                      bold('. Interval: [') ~ italic(.(min_time)) ~ "; " ~
+                      italic(.(max_time)) ~ "]." ),
         line=3.9, cex.lab=0.5, font.lab=3, col.lab = "red")
   #
   lines(x = df_election_fractions$sec_offset,
@@ -2866,8 +2870,12 @@ plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
   title(xlab=bquote(bold('Code source: ') ~ italic(.(my_github_base))),
         line=3.5, cex.lab=0.75, font.lab=3, col.lab = "darkgreen")
   options(digits.secs = 3)
+  min_time <- gsub("\\.",":",format(as.POSIXct(xlims[1], origin = "1970-01-01"), "%Y:%m:%d:%H:%M:%OS"))
+  max_time <- gsub("\\.",":",format(as.POSIXct(xlims[2], origin = "1970-01-01"), "%Y:%m:%d:%H:%M:%OS"))
   current_time <- gsub("\\.",":",format(Sys.time(), "%Y:%m:%d:%H:%M:%OS"))
-  title(xlab=bquote(bold('Current time: ') ~ bold(.(current_time))),
+  title(xlab=bquote(bold('Current time: ') ~ italic(.(current_time)) ~
+                      bold('. Interval: [') ~ italic(.(min_time)) ~ "; " ~
+                      italic(.(max_time)) ~ "]." ),
         line=3.9, cex.lab=0.5, font.lab=3, col.lab = "red")
   #
   lines(x = df_election_fractions$sec_offset,
@@ -2949,8 +2957,12 @@ plot.cumulative.vote.fracs <- function(df_election_fractions, xlims,
   title(xlab=bquote(bold('Code source: ') ~ italic(.(my_github_base))),
         line=3.5, cex.lab=0.75, font.lab=3, col.lab = "darkgreen")
   options(digits.secs = 3)
+  min_time <- gsub("\\.",":",format(as.POSIXct(xlims[1], origin = "1970-01-01"), "%Y:%m:%d:%H:%M:%OS"))
+  max_time <- gsub("\\.",":",format(as.POSIXct(xlims[2], origin = "1970-01-01"), "%Y:%m:%d:%H:%M:%OS"))
   current_time <- gsub("\\.",":",format(Sys.time(), "%Y:%m:%d:%H:%M:%OS"))
-  title(xlab=bquote(bold('Current time: ') ~ bold(.(current_time))),
+  title(xlab=bquote(bold('Current time: ') ~ italic(.(current_time)) ~
+                      bold('. Interval: [') ~ italic(.(min_time)) ~ "; " ~
+                      italic(.(max_time)) ~ "]." ),
         line=3.9, cex.lab=0.5, font.lab=3, col.lab = "red")
   #title(xlab = expression("black" * phantom("red") * ")"), col.lab = "black")
   #title(xlab = expression(phantom("black") * "red"), col.lab = "red")
