@@ -34,7 +34,9 @@ if(bool.download.json | bool.generate.csv | bool.backup.csv)
     bool.generate.csv = bool.generate.csv,
     bool.backup.csv = bool.backup.csv,
     race_strings = race_strings,
-    president_state_strings = president_state_strings)
+    president_state_strings = president_state_strings,
+    senate_state_strings = senate_state_strings,
+    special_state_strings = special_state_strings)
 }
 
 ########################################################################
@@ -47,6 +49,8 @@ if(bool.generate.pdf)
                                    my_github_base = my_github_base,
                                    race_strings = race_strings,
                                    president_state_strings = president_state_strings,
+                                   senate_state_strings = senate_state_strings,
+                                   special_state_strings = special_state_strings,
                                    list_state_to_abbr = list_state_to_abbr,
                                    str_election_date_abbr = "201103",
                                    str_plot_type_abbr = "ts") # pass "rc" and "st" to other functions

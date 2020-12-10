@@ -100,7 +100,9 @@ president_state_strings <- c("alabama", "alaska", "arizona", "arkansas", "califo
 
 senate_state_strings <- c("alabama", "alaska", "arkansas", "colorado", "delaware", "georgia", 
                           "idaho", "illinois", "iowa", "kansas", "kentucky", "louisiana", 
-                          "maine", "massachusetts", "michigan", "minnesota", "mississippi", 
+                          "maine",
+                          #"massachusetts", # missing data
+                          "michigan", "minnesota", "mississippi", 
                           "montana", "nebraska", "new-hampshire", "new-jersey", "new-mexico", 
                           "north-carolina", "oklahoma", "oregon", "rhode-island", "south-carolina", 
                           "south-dakota", "tennessee", "texas", "virginia", "west-virginia", 
@@ -121,6 +123,83 @@ list_state_to_abbr <- list(alabama = "al", alaska = "ak", arizona = "az", arkans
                            `south-carolina` = "sc", `south-dakota` = "sd", tennessee = "tn", texas = "tx", utah = "ut",
                            vermont = "vt", virginia = "va", washington = "wa", `west-virginia` = "wv", wisconsin = "wi",
                            wyoming = "wy")
+
+list_state_to_sen_cand_rep <- list(alabama          = "vote_shares_tubervillet", # Tuberville
+                                   alaska           = "vote_shares_sullivand",   # Sullivan
+                                   arkansas         = "vote_shares_cottont",     # Cotton
+                                   colorado         = "vote_shares_gardnerc",    # Gardner
+                                   delaware         = "vote_shares_witzkel",     # Witzke
+                                   georgia          = "vote_shares_perdued",     # Perdue
+                                   idaho            = "vote_shares_rischj",      # Risch
+                                   illinois         = "vote_shares_curranm",     # Curran
+                                   iowa             = "vote_shares_ernstj",      # Ernst
+                                   kansas           = "vote_shares_marshallr",   # Marshall
+                                   kentucky         = "vote_shares_mcconnellm",  # McConnell
+                                   louisiana        = "vote_shares_cassidyb",    # Cassidy, Murphy (vote_shares_murphyd)
+                                   maine            = "vote_shares_collinss",    # Collins
+                                   #massachusetts    = "",                       # O'Connor; missing data
+                                   michigan         = "vote_shares_jamesj",      # James
+                                   minnesota        = "vote_shares_lewisj",      # Lewis
+                                   mississippi      = "vote_shares_hyde_smithc", # Hyde-Smith
+                                   montana          = "vote_shares_dainess",     # Daines
+                                   nebraska         = "vote_shares_sasseb",      # Sasse
+                                   `new-hampshire`  = "vote_shares_messnerc",    # Messner
+                                   `new-jersey`     = "vote_shares_mehtar",      # Mehta
+                                   `new-mexico`     = "vote_shares_ronchettim",  # Ronchetti
+                                   `north-carolina` = "vote_shares_tillist",     # Tillis
+                                   oklahoma         = "vote_shares_inhofej",     # Inhofe
+                                   oregon           = "vote_shares_perkinsj",    # Perkins
+                                   `rhode-island`   = "vote_shares_watersa",     # Waters
+                                   `south-carolina` = "vote_shares_grahaml",     # Graham
+                                   `south-dakota`   = "vote_shares_roundsm",     # Rounds
+                                   tennessee        = "vote_shares_hagertyb",    # Hagerty
+                                   texas            = "vote_shares_cornynj",     # Cornyn
+                                   virginia         = "vote_shares_gaded",       # Gade
+                                   `west-virginia`  = "vote_shares_capitos",     # Capito  (the fix is hardcoded)
+                                   wyoming          = "vote_shares_lummisc"      # Lummis
+                                   )
+list_state_to_sen_cand_dem <- list(alabama          = "vote_shares_jonesd",        # Jones
+                                   alaska           = "vote_shares_grossa",        # Gross
+                                   arkansas         = "vote_shares_harringtonr",   # Harrington
+                                   colorado         = "vote_shares_hickenlooperj", # Hickenlooper
+                                   delaware         = "vote_shares_coonsc",        # Coons
+                                   georgia          = "vote_shares_ossoffj",       # Ossoff
+                                   idaho            = "vote_shares_jordanp",       # Jordan
+                                   illinois         = "vote_shares_durbinr",       # Durbin
+                                   iowa             = "vote_shares_greenfieldt",   # Greenfield
+                                   kansas           = "vote_shares_bollierb",      # Bollier
+                                   kentucky         = "vote_shares_mcgratha",      # McGrath
+                                   louisiana        = "vote_shares_piercea",       # Perkins, Edwards (vote_shares_wenstrupp), Pierce (vote_shares_perkinsa)
+                                   maine            = "vote_shares_gideons",       # Gideon
+                                   #massachusetts    = "",                         # Markey; missing data
+                                   michigan         = "vote_shares_petersg",       # Peters
+                                   minnesota        = "vote_shares_smitht",        # Smith
+                                   mississippi      = "vote_shares_espym",         # Espy
+                                   montana          = "vote_shares_bullocks",      # Bullock
+                                   nebraska         = "vote_shares_janicekc",      # Janicek
+                                   `new-hampshire`  = "vote_shares_shaheenj",      # Shaheen
+                                   `new-jersey`     = "vote_shares_bookerc",       # Booker
+                                   `new-mexico`     = "vote_shares_lujanm",        # Lujan (the fix is hardcoded)
+                                   `north-carolina` = "vote_shares_cunninghamc",   # Cunningham
+                                   oklahoma         = "vote_shares_broylesa",      # Broyles
+                                   oregon           = "vote_shares_merkleyj",      # Merkley
+                                   `rhode-island`   = "vote_shares_reedj",         # Reed
+                                   `south-carolina` = "vote_shares_harrisonj",     # Harrison
+                                   `south-dakota`   = "vote_shares_ahlersd",       # Ahlers
+                                   tennessee        = "vote_shares_bradshawm",     # Bradshaw
+                                   texas            = "vote_shares_hegarm",        # Hegar
+                                   virginia         = "vote_shares_warnerm",       # Warner
+                                   `west-virginia`  = "vote_shares_swearenginp",   # Swearengin
+                                   wyoming          = "vote_shares_ben_davidm"     # Ben-David
+                                   )
+
+list_state_to_spec_cand_rep <- list(arizona = "vote_shares_mcsallym",
+                                    georgia = "vote_shares_loefflerk" # hard-coded: georgia += "vote_shares_collinsd"
+                                    )
+list_state_to_spec_cand_dem <- list(arizona = "vote_shares_kellym",
+                                    georgia = "vote_shares_warnockr"
+                                    )
+
 
 ######################################################################################################
 url_template <- "https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/precincts"
@@ -2315,7 +2394,8 @@ simpleCap <- function(x)
 
 download.json.generate.csv.for.fractions <- function(str.input.file.path, json_url_base,
                                                      bool.download.json, bool.generate.csv, bool.backup.csv,
-                                                     race_strings, president_state_strings)
+                                                     race_strings, president_state_strings, senate_state_strings,
+                                                     special_state_strings)
 {
   # Data loading and preparation
   if(bool.download.json | bool.generate.csv | bool.backup.csv)
@@ -2327,19 +2407,22 @@ download.json.generate.csv.for.fractions <- function(str.input.file.path, json_u
       {
         url_string <- "senate/0/special.json"
         path_string <- "special"
+        state_strings <- special_state_strings
       } else if (race == "president")
       {
         url_string <- "president.json"
         path_string <- "president"
+        state_strings <- president_state_strings
       } else if (race == "senate")
       {
         url_string <- "senate.json"
         path_string <- "senate"
+        state_strings <- senate_state_strings
       }
       
-      for(state_index in 1:length(president_state_strings))
+      for(state_index in 1:length(state_strings))
       {
-        state_name <- president_state_strings[state_index]
+        state_name <- state_strings[state_index]
         json_path <- paste0(str.input.file.path,"/",state_name)
         json_path_name <- paste0(json_path,"/",path_string,".json")
         json_url <- paste0(json_url_base, "/", state_name, "/", url_string)
@@ -2441,7 +2524,7 @@ download.json.generate.csv.for.fractions <- function(str.input.file.path, json_u
           write.csv(x = df.timeseries, file = csv_path_name, row.names = FALSE)
         } # END if(bool.generate.csv & file.exists(json_path_name))
         ########################################################################
-      } # END for(state_index in 1:length(president_state_strings))
+      } # END for(state_index in 1:length(state_strings))
     } # END for(race_index in 1:length(race_strings))
   } # END if(bool.download.json | bool.generate.csv | bool.backup.csv)
 }
@@ -2456,18 +2539,50 @@ read.csv.prepare.fraction.data <- function(str.input.file.path, state_name,race)
     df_election_fractions <- read.csv(file = csv_path_name, stringsAsFactors = FALSE, strip.white = TRUE, sep = ',')
     df_election_fractions <- df_election_fractions[df_election_fractions$eevp_source == "edison" &
                                                      df_election_fractions$votes > 0,]
-    df_election_fractions <- unique(df_election_fractions)
-    df_election_fractions <- df_election_fractions[order(df_election_fractions$sec_offset),]
+    df_election_fractions <- df_election_fractions[order(df_election_fractions$sec_offset,
+                                                         -df_election_fractions$votes),]
+    df_election_fractions <- df_election_fractions[!duplicated(df_election_fractions$sec_offset),]
     rownames(df_election_fractions) <- NULL
     n <- nrow(df_election_fractions)
     #
-    if("vote_shares_trumpd" %in% colnames(df_election_fractions))
+    if(race == "president")
     {
       colnames(df_election_fractions)[colnames(df_election_fractions)=="vote_shares_trumpd"] <- "vote_shares_republican"
-    }
-    if("vote_shares_bidenj" %in% colnames(df_election_fractions))
-    {
       colnames(df_election_fractions)[colnames(df_election_fractions)=="vote_shares_bidenj"] <- "vote_shares_democrat"
+    } else if (race == "senate")
+    {
+      if(state_name != "west-virginia")
+      {
+        colnames(df_election_fractions)[colnames(df_election_fractions)==list_state_to_sen_cand_rep[[state_name]]] <- "vote_shares_republican"
+      } else
+      {
+        df_election_fractions$vote_shares_republican <- 1 - df_election_fractions$vote_shares_swearenginp # vote_shares_capitos
+      }
+      if(state_name != "new-mexico")
+      {
+        colnames(df_election_fractions)[colnames(df_election_fractions)==list_state_to_sen_cand_dem[[state_name]]] <- "vote_shares_democrat"
+      } else
+      {
+        df_election_fractions$vote_shares_democrat <- 1 - df_election_fractions$vote_shares_republican # vote_shares_lujanm
+      }
+      if(state_name == "louisiana")
+      {
+        df_election_fractions$vote_shares_republican <- df_election_fractions$vote_shares_republican + df_election_fractions$vote_shares_murphyd
+        df_election_fractions$vote_shares_murphyd <- NULL
+        df_election_fractions$vote_shares_democrat <- df_election_fractions$vote_shares_democrat + df_election_fractions$vote_shares_wenstrupp
+        df_election_fractions$vote_shares_democrat <- df_election_fractions$vote_shares_democrat + df_election_fractions$vote_shares_perkinsa
+        df_election_fractions$vote_shares_wenstrupp <- NULL
+        df_election_fractions$vote_shares_perkinsa <- NULL
+      }  
+    } else if (race == "special")
+    {
+      colnames(df_election_fractions)[colnames(df_election_fractions)==list_state_to_spec_cand_rep[[state_name]]] <- "vote_shares_republican"
+      if(state_name == "georgia")
+      {
+        df_election_fractions$vote_shares_republican <- df_election_fractions$vote_shares_republican + df_election_fractions$vote_shares_collinsd
+        df_election_fractions$vote_shares_collinsd <- NULL
+      }
+      colnames(df_election_fractions)[colnames(df_election_fractions)==list_state_to_spec_cand_dem[[state_name]]] <- "vote_shares_democrat"
     }
     #
     df_election_fractions$vote_shares_republican_lb <- df_election_fractions$vote_shares_republican - 0.0005
@@ -2510,6 +2625,8 @@ read.csv.prepare.fraction.data <- function(str.input.file.path, state_name,race)
                                                   df_election_fractions$vote_shares_democrat[1:(n-1)]) /
                                              df_election_fractions$vote_shares_democrat[1:(n-1)] *
                                              (df_election_fractions$votes_delta[2:n] / df_election_fractions$votes[n]))
+    df_election_fractions$republican_stat[is.infinite(df_election_fractions$republican_stat)] <- NaN
+    df_election_fractions$democrat_stat[is.infinite(df_election_fractions$democrat_stat)] <- NaN
     
     df_election_fractions$votes_pct <- df_election_fractions$votes / df_election_fractions$votes[n] * 100
   }
@@ -2892,10 +3009,22 @@ plot.batch.impact.statistic <- function(df_election_fractions, xlims,
   #
   par(family="mono") # By default Courier
   step <- (ylims[2] - ylims[1]) / 35
-  below.zero.y <- seq(0,ylims[1], -step)
-  below.zero.y <- below.zero.y[order(below.zero.y)]
-  above.zero.y <- seq(0,ylims[2], step)
-  above.zero.y <- above.zero.y[1:(length(above.zero.y)-1)]
+  if(ylims[1] < 0)
+  {
+    below.zero.y <- seq(0,ylims[1], -step)
+    below.zero.y <- below.zero.y[order(below.zero.y)]
+  } else
+  {
+    below.zero.y <- c()
+  }
+  if(ylims[2] > 0)
+  {
+    above.zero.y <- seq(0,ylims[2], step)
+    above.zero.y <- above.zero.y[1:(length(above.zero.y)-1)]
+  } else
+  {
+    above.zero.y <- c()
+  }
   lab.list.y.pos <- c(below.zero.y, above.zero.y)
   lab.list.y.text <- sprintf("%3.3f", round(lab.list.y.pos, 3))
   axis(side = 2, at = lab.list.y.pos, labels = lab.list.y.text,
@@ -3159,6 +3288,8 @@ generate.plots.for.all.intervals <- function(str.input.file.path,
                                              my_github_base,
                                              race_strings,
                                              president_state_strings,
+                                             senate_state_strings,
+                                             special_state_strings,
                                              list_state_to_abbr,
                                              str_election_date_abbr = "201103",
                                              str_plot_type_abbr)
@@ -3171,6 +3302,8 @@ generate.plots.for.all.intervals <- function(str.input.file.path,
                                                 my_github_base = my_github_base,
                                                 race_strings = race_strings,
                                                 president_state_strings = president_state_strings,
+                                                senate_state_strings = senate_state_strings,
+                                                special_state_strings = special_state_strings,
                                                 list_state_to_abbr = list_state_to_abbr,
                                                 ts.type = ts.type,
                                                 str_election_date_abbr = str_election_date_abbr,
@@ -3184,6 +3317,8 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
                                                         my_github_base,
                                                         race_strings,
                                                         president_state_strings,
+                                                        senate_state_strings,
+                                                        special_state_strings,
                                                         list_state_to_abbr,
                                                         ts.type,
                                                         str_election_date_abbr = "201103",
@@ -3192,29 +3327,31 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
   pdf_output_path <- paste0(str.output.file.path,"/pdf")
   pdf_file_name_comp_date <- str_election_date_abbr
   pdf_file_name_comp_plot_type <- str_plot_type_abbr
-  #for(race_index in 1:length(race_strings))
-  race_index <- 1 # race = "president"
+  for(race_index in 1:length(race_strings))
   {
     race <- race_strings[race_index]
     if(race == "special")
     {
       url_string <- "senate/0/special.json"
       pdf_file_name_comp_race <- "sp"
+      state_strings <- special_state_strings
     } else if (race == "president")
     {
       url_string <- "president.json"
       pdf_file_name_comp_race <- "pr"
+      state_strings <- president_state_strings
     } else if (race == "senate")
     {
       url_string <- "senate.json"
       pdf_file_name_comp_race <- "se"
+      state_strings <- senate_state_strings
     } else
     {
       pdf_file_name_comp_race <- ""
     }
-    for(state_index in 1:length(president_state_strings))
+    for(state_index in 1:length(state_strings))
     {
-      state_name <- president_state_strings[state_index]
+      state_name <- state_strings[state_index]
       pdf_file_name_comp_state <- list_state_to_abbr[[state_name]]
       json_url <- paste0(json_url_base, "/", state_name, "/", url_string)
       df_election_fractions <- read.csv.prepare.fraction.data(
@@ -3340,6 +3477,6 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
         }
         dev.off()
       } # END if(!is.null(df_election_fractions))
-    } # END for(state_index in 1:length(president_state_strings))
+    } # END for(state_index in 1:length(state_strings))
   } # END for(race_index in 1:length(race_strings))
 }
