@@ -114,7 +114,7 @@ race_strings <- c("president", "senate", "special")
 
 list_state_to_abbr <- list(alabama = "al", alaska = "ak", arizona = "az", arkansas = "ar", california = "ca",
                            colorado = "co", connecticut = "ct", delaware = "de", `district-of-columbia` = "dc", florida = "fl",
-                           georgia ="ga", hawaii = "hi", idaho = "id", illinois ="il", indiana = "in",
+                           georgia = "ga", hawaii = "hi", idaho = "id", illinois ="il", indiana = "in",
                            iowa = "ia", kansas = "ks", kentucky = "ky", louisiana = "la", maine = "me",
                            maryland = "md", massachusetts = "ma", michigan = "mi", minnesota = "mn", mississippi = "ms",
                            missouri = "mo", montana = "mt", nebraska = "ne", nevada = "nv", `new-hampshire` = "nh",
@@ -124,74 +124,130 @@ list_state_to_abbr <- list(alabama = "al", alaska = "ak", arizona = "az", arkans
                            vermont = "vt", virginia = "va", washington = "wa", `west-virginia` = "wv", wisconsin = "wi",
                            wyoming = "wy")
 
-list_state_to_sen_cand_rep <- list(alabama          = "vote_shares_tubervillet", # Tuberville
-                                   alaska           = "vote_shares_sullivand",   # Sullivan
-                                   arkansas         = "vote_shares_cottont",     # Cotton
-                                   colorado         = "vote_shares_gardnerc",    # Gardner
-                                   delaware         = "vote_shares_witzkel",     # Witzke
-                                   georgia          = "vote_shares_perdued",     # Perdue
-                                   idaho            = "vote_shares_rischj",      # Risch
-                                   illinois         = "vote_shares_curranm",     # Curran
-                                   iowa             = "vote_shares_ernstj",      # Ernst
-                                   kansas           = "vote_shares_marshallr",   # Marshall
-                                   kentucky         = "vote_shares_mcconnellm",  # McConnell
-                                   louisiana        = "vote_shares_cassidyb",    # Cassidy, Murphy (vote_shares_murphyd)
-                                   maine            = "vote_shares_collinss",    # Collins
-                                   #massachusetts    = "",                       # O'Connor; missing data
-                                   michigan         = "vote_shares_jamesj",      # James
-                                   minnesota        = "vote_shares_lewisj",      # Lewis
-                                   mississippi      = "vote_shares_hyde_smithc", # Hyde-Smith
-                                   montana          = "vote_shares_dainess",     # Daines
-                                   nebraska         = "vote_shares_sasseb",      # Sasse
-                                   `new-hampshire`  = "vote_shares_messnerc",    # Messner
-                                   `new-jersey`     = "vote_shares_mehtar",      # Mehta
-                                   `new-mexico`     = "vote_shares_ronchettim",  # Ronchetti
-                                   `north-carolina` = "vote_shares_tillist",     # Tillis
-                                   oklahoma         = "vote_shares_inhofej",     # Inhofe
-                                   oregon           = "vote_shares_perkinsj",    # Perkins
-                                   `rhode-island`   = "vote_shares_watersa",     # Waters
-                                   `south-carolina` = "vote_shares_grahaml",     # Graham
-                                   `south-dakota`   = "vote_shares_roundsm",     # Rounds
-                                   tennessee        = "vote_shares_hagertyb",    # Hagerty
-                                   texas            = "vote_shares_cornynj",     # Cornyn
-                                   virginia         = "vote_shares_gaded",       # Gade
-                                   `west-virginia`  = "vote_shares_capitos",     # Capito  (the fix is hardcoded)
-                                   wyoming          = "vote_shares_lummisc"      # Lummis
-                                   )
-list_state_to_sen_cand_dem <- list(alabama          = "vote_shares_jonesd",        # Jones
-                                   alaska           = "vote_shares_grossa",        # Gross
-                                   arkansas         = "vote_shares_harringtonr",   # Harrington
-                                   colorado         = "vote_shares_hickenlooperj", # Hickenlooper
-                                   delaware         = "vote_shares_coonsc",        # Coons
-                                   georgia          = "vote_shares_ossoffj",       # Ossoff
-                                   idaho            = "vote_shares_jordanp",       # Jordan
-                                   illinois         = "vote_shares_durbinr",       # Durbin
-                                   iowa             = "vote_shares_greenfieldt",   # Greenfield
-                                   kansas           = "vote_shares_bollierb",      # Bollier
-                                   kentucky         = "vote_shares_mcgratha",      # McGrath
-                                   louisiana        = "vote_shares_piercea",       # Perkins, Edwards (vote_shares_wenstrupp), Pierce (vote_shares_perkinsa)
-                                   maine            = "vote_shares_gideons",       # Gideon
-                                   #massachusetts    = "",                         # Markey; missing data
-                                   michigan         = "vote_shares_petersg",       # Peters
-                                   minnesota        = "vote_shares_smitht",        # Smith
-                                   mississippi      = "vote_shares_espym",         # Espy
-                                   montana          = "vote_shares_bullocks",      # Bullock
-                                   nebraska         = "vote_shares_janicekc",      # Janicek
-                                   `new-hampshire`  = "vote_shares_shaheenj",      # Shaheen
-                                   `new-jersey`     = "vote_shares_bookerc",       # Booker
-                                   `new-mexico`     = "vote_shares_lujanm",        # Lujan (the fix is hardcoded)
-                                   `north-carolina` = "vote_shares_cunninghamc",   # Cunningham
-                                   oklahoma         = "vote_shares_broylesa",      # Broyles
-                                   oregon           = "vote_shares_merkleyj",      # Merkley
-                                   `rhode-island`   = "vote_shares_reedj",         # Reed
-                                   `south-carolina` = "vote_shares_harrisonj",     # Harrison
-                                   `south-dakota`   = "vote_shares_ahlersd",       # Ahlers
-                                   tennessee        = "vote_shares_bradshawm",     # Bradshaw
-                                   texas            = "vote_shares_hegarm",        # Hegar
-                                   virginia         = "vote_shares_warnerm",       # Warner
-                                   `west-virginia`  = "vote_shares_swearenginp",   # Swearengin
-                                   wyoming          = "vote_shares_ben_davidm"     # Ben-David
-                                   )
+list_state_to_interval <- list(
+  alabama                = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T22:00:00Z"), # TBD
+  alaska                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  arizona                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  arkansas               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  california             = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  colorado               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  connecticut            = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  delaware               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `district-of-columbia` = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  florida                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  georgia                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
+  hawaii                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  idaho                  = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  illinois               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  indiana                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  iowa                   = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  kansas                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  kentucky               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  louisiana              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  maine                  = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  maryland               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  massachusetts          = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  michigan               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
+  minnesota              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  mississippi            = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  missouri               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  montana                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  nebraska               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  nevada                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `new-hampshire`        = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `new-jersey`           = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `new-mexico`           = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `new-york`             = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `north-carolina`       = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `north-dakota`         = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  ohio                   = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  oklahoma               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  oregon                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  pennsylvania           = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
+  `rhode-island`         = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD,
+  `south-carolina`       = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `south-dakota`         = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  tennessee              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  texas                  = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  utah                   = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  vermont                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  virginia               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  washington             = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  `west-virginia`        = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
+  wisconsin              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
+  wyoming                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z") # TBD
+)
+
+list_state_to_sen_cand_rep <- list(
+  alabama          = "vote_shares_tubervillet", # Tuberville
+  alaska           = "vote_shares_sullivand",   # Sullivan
+  arkansas         = "vote_shares_cottont",     # Cotton
+  colorado         = "vote_shares_gardnerc",    # Gardner
+  delaware         = "vote_shares_witzkel",     # Witzke
+  georgia          = "vote_shares_perdued",     # Perdue
+  idaho            = "vote_shares_rischj",      # Risch
+  illinois         = "vote_shares_curranm",     # Curran
+  iowa             = "vote_shares_ernstj",      # Ernst
+  kansas           = "vote_shares_marshallr",   # Marshall
+  kentucky         = "vote_shares_mcconnellm",  # McConnell
+  louisiana        = "vote_shares_cassidyb",    # Cassidy, Murphy (vote_shares_murphyd)
+  maine            = "vote_shares_collinss",    # Collins
+  #massachusetts    = "",                       # O'Connor; missing data
+  michigan         = "vote_shares_jamesj",      # James
+  minnesota        = "vote_shares_lewisj",      # Lewis
+  mississippi      = "vote_shares_hyde_smithc", # Hyde-Smith
+  montana          = "vote_shares_dainess",     # Daines
+  nebraska         = "vote_shares_sasseb",      # Sasse
+  `new-hampshire`  = "vote_shares_messnerc",    # Messner
+  `new-jersey`     = "vote_shares_mehtar",      # Mehta
+  `new-mexico`     = "vote_shares_ronchettim",  # Ronchetti
+  `north-carolina` = "vote_shares_tillist",     # Tillis
+  oklahoma         = "vote_shares_inhofej",     # Inhofe
+  oregon           = "vote_shares_perkinsj",    # Perkins
+  `rhode-island`   = "vote_shares_watersa",     # Waters
+  `south-carolina` = "vote_shares_grahaml",     # Graham
+  `south-dakota`   = "vote_shares_roundsm",     # Rounds
+  tennessee        = "vote_shares_hagertyb",    # Hagerty
+  texas            = "vote_shares_cornynj",     # Cornyn
+  virginia         = "vote_shares_gaded",       # Gade
+  `west-virginia`  = "vote_shares_capitos",     # Capito  (the fix is hardcoded)
+  wyoming          = "vote_shares_lummisc"      # Lummis
+)
+list_state_to_sen_cand_dem <- list(
+  alabama          = "vote_shares_jonesd",        # Jones
+  alaska           = "vote_shares_grossa",        # Gross
+  arkansas         = "vote_shares_harringtonr",   # Harrington
+  colorado         = "vote_shares_hickenlooperj", # Hickenlooper
+  delaware         = "vote_shares_coonsc",        # Coons
+  georgia          = "vote_shares_ossoffj",       # Ossoff
+  idaho            = "vote_shares_jordanp",       # Jordan
+  illinois         = "vote_shares_durbinr",       # Durbin
+  iowa             = "vote_shares_greenfieldt",   # Greenfield
+  kansas           = "vote_shares_bollierb",      # Bollier
+  kentucky         = "vote_shares_mcgratha",      # McGrath
+  louisiana        = "vote_shares_piercea",       # Perkins, Edwards (vote_shares_wenstrupp), Pierce (vote_shares_perkinsa)
+  maine            = "vote_shares_gideons",       # Gideon
+  #massachusetts    = "",                         # Markey; missing data
+  michigan         = "vote_shares_petersg",       # Peters
+  minnesota        = "vote_shares_smitht",        # Smith
+  mississippi      = "vote_shares_espym",         # Espy
+  montana          = "vote_shares_bullocks",      # Bullock
+  nebraska         = "vote_shares_janicekc",      # Janicek
+  `new-hampshire`  = "vote_shares_shaheenj",      # Shaheen
+  `new-jersey`     = "vote_shares_bookerc",       # Booker
+  `new-mexico`     = "vote_shares_lujanm",        # Lujan (the fix is hardcoded)
+  `north-carolina` = "vote_shares_cunninghamc",   # Cunningham
+  oklahoma         = "vote_shares_broylesa",      # Broyles
+  oregon           = "vote_shares_merkleyj",      # Merkley
+  `rhode-island`   = "vote_shares_reedj",         # Reed
+  `south-carolina` = "vote_shares_harrisonj",     # Harrison
+  `south-dakota`   = "vote_shares_ahlersd",       # Ahlers
+  tennessee        = "vote_shares_bradshawm",     # Bradshaw
+  texas            = "vote_shares_hegarm",        # Hegar
+  virginia         = "vote_shares_warnerm",       # Warner
+  `west-virginia`  = "vote_shares_swearenginp",   # Swearengin
+  wyoming          = "vote_shares_ben_davidm"     # Ben-David
+)
 
 list_state_to_spec_cand_rep <- list(arizona = "vote_shares_mcsallym",
                                     georgia = "vote_shares_loefflerk" # hard-coded: georgia += "vote_shares_collinsd"
@@ -2635,28 +2691,14 @@ read.csv.prepare.fraction.data <- function(str.input.file.path, state_name,race)
   
 plot.batch.impact <- function(str_curr_min_time = NA, str_curr_max_time = NA,
                               df_election_fractions,
-                              race, state_name, json_url, my_github_base, int.time.last.flip)
+                              race, state_name, json_url, my_github_base, int.time.last.flip,
+                              ylims.batch.size = NULL, ylims.batch.impact = NULL)
 {
-  #xmin <- as.numeric(strptime("2020-11-03T21:00:00Z", "%Y-%m-%dT%H:%M:%OSZ"))
-  #xmax <- as.numeric(strptime("2020-11-05T00:00:00Z", "%Y-%m-%dT%H:%M:%OSZ"))
-  if(is.na(str_curr_min_time))
-  {
-    xmin <- min(df_election_fractions$sec_offset, na.rm = TRUE)
-  } else
-  {
-    xmin <- as.numeric(strptime(str_curr_min_time, "%Y-%m-%dT%H:%M:%OSZ"))
-  }
-  if(is.na(str_curr_max_time))
-  {
-    xmax <- max(df_election_fractions$sec_offset, na.rm = TRUE)
-  } else
-  {
-    xmax <- as.numeric(strptime(str_curr_max_time, "%Y-%m-%dT%H:%M:%OSZ"))
-  }
-  xmin <- min(xmin, xmax)
-  xmax <- max(xmin, xmax)
-  xlims <- c(xmin, xmax)
-
+  xlims <- compute.xlims.lower.time(
+    str_curr_min_time = str_curr_min_time,
+    str_curr_max_time = str_curr_max_time,
+    df_election_fractions = df_election_fractions)
+  
   df_election_fractions_subinterval <- df_election_fractions[df_election_fractions$sec_offset >= xlims[1] &
                                                                df_election_fractions$sec_offset <= xlims[2],]
   if(nrow(df_election_fractions_subinterval) > 1)
@@ -2678,14 +2720,15 @@ plot.batch.impact <- function(str_curr_min_time = NA, str_curr_max_time = NA,
         min(df_election_fractions_subinterval$democrat_stat, na.rm = TRUE) < max(df_election_fractions_subinterval$democrat_stat, na.rm = TRUE)))
     {
       plot.batch.size.barchart(df_election_fractions = df_election_fractions,
-                               xlims = xlims)
+                               xlims = xlims, ylims.batch.size = ylims.batch.size)
       par(new = T, xpd=FALSE)
       lab.list.x.pos <- plot.batch.impact.statistic(df_election_fractions = df_election_fractions,
                                                     xlims = xlims,
                                                     race = race,
                                                     state_name = state_name,
                                                     json_url = json_url,
-                                                    my_github_base = my_github_base)
+                                                    my_github_base = my_github_base,
+                                                    ylims.batch.impact = ylims.batch.impact)
       par(new = T, xpd=FALSE)
       ylims <- plot.cumulative.tally.percent(df_election_fractions = df_election_fractions,
                                              xlims = xlims, lab.list.x.pos = lab.list.x.pos)
@@ -2709,27 +2752,13 @@ plot.batch.impact <- function(str_curr_min_time = NA, str_curr_max_time = NA,
 
 plot.cumulative.votes <- function(str_curr_min_time = NA, str_curr_max_time = NA,
                                   df_election_fractions,
-                                  race, state_name, json_url, my_github_base, int.time.last.flip)
+                                  race, state_name, json_url, my_github_base, int.time.last.flip,
+                                  ylims.batch.size = NULL, ylims.cumulative.votes = NULL)
 {
-  #xmin <- as.numeric(strptime("2020-11-03T21:00:00Z", "%Y-%m-%dT%H:%M:%OSZ"))
-  #xmax <- as.numeric(strptime("2020-11-05T00:00:00Z", "%Y-%m-%dT%H:%M:%OSZ"))
-  if(is.na(str_curr_min_time))
-  {
-    xmin <- min(df_election_fractions$sec_offset, na.rm = TRUE)
-  } else
-  {
-    xmin <- as.numeric(strptime(str_curr_min_time, "%Y-%m-%dT%H:%M:%OSZ"))
-  }
-  if(is.na(str_curr_max_time))
-  {
-    xmax <- max(df_election_fractions$sec_offset, na.rm = TRUE)
-  } else
-  {
-    xmax <- as.numeric(strptime(str_curr_max_time, "%Y-%m-%dT%H:%M:%OSZ"))
-  }
-  xmin <- min(xmin, xmax)
-  xmax <- max(xmin, xmax)
-  xlims <- c(xmin, xmax)
+  xlims <- compute.xlims.lower.time(
+    str_curr_min_time = str_curr_min_time,
+    str_curr_max_time = str_curr_max_time,
+    df_election_fractions = df_election_fractions)
   
   df_election_fractions_subinterval <- df_election_fractions[df_election_fractions$sec_offset >= xlims[1] &
                                                             df_election_fractions$sec_offset <= xlims[2],]
@@ -2752,14 +2781,15 @@ plot.cumulative.votes <- function(str_curr_min_time = NA, str_curr_max_time = NA
         min(df_election_fractions_subinterval$democrat_stat, na.rm = TRUE) < max(df_election_fractions_subinterval$democrat_stat, na.rm = TRUE)))
     {
       plot.batch.size.barchart(df_election_fractions = df_election_fractions,
-                               xlims = xlims)
+                               xlims = xlims, ylims.batch.size = ylims.batch.size)
       par(new = T, xpd=FALSE)
       lab.list.x.pos <- plot.cumulative.vote.counts(df_election_fractions = df_election_fractions,
                                                     xlims = xlims,
                                                     race = race,
                                                     state_name = state_name,
                                                     json_url = json_url,
-                                                    my_github_base = my_github_base)
+                                                    my_github_base = my_github_base,
+                                                    ylims.cumulative.votes = ylims.cumulative.votes)
       par(new = T, xpd=FALSE)
       ylims <- plot.cumulative.tally.percent(df_election_fractions = df_election_fractions,
                                              xlims = xlims, lab.list.x.pos = lab.list.x.pos)
@@ -2781,9 +2811,7 @@ plot.cumulative.votes <- function(str_curr_min_time = NA, str_curr_max_time = NA
   }
 }
 
-plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_time = NA,
-                                           df_election_fractions,
-                                           race, state_name, json_url, my_github_base, int.time.last.flip)
+compute.xlims.lower.time <- function(str_curr_min_time = NA, str_curr_max_time = NA, df_election_fractions)
 {
   #xmin <- as.numeric(strptime("2020-11-03T21:00:00Z", "%Y-%m-%dT%H:%M:%OSZ"))
   #xmax <- as.numeric(strptime("2020-11-05T00:00:00Z", "%Y-%m-%dT%H:%M:%OSZ"))
@@ -2804,6 +2832,17 @@ plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_
   xmin <- min(xmin, xmax)
   xmax <- max(xmin, xmax)
   xlims <- c(xmin, xmax)
+  return(xlims)
+}
+
+plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_time = NA, df_election_fractions,
+                                           race, state_name, json_url, my_github_base, int.time.last.flip,
+                                           ylims.batch.size = NULL, ylims.cumulative.vote.fractions = NULL)
+{
+  xlims <- compute.xlims.lower.time(
+    str_curr_min_time = str_curr_min_time,
+    str_curr_max_time = str_curr_max_time,
+    df_election_fractions = df_election_fractions)
   
   df_election_fractions_subinterval <- df_election_fractions[df_election_fractions$sec_offset >= xlims[1] &
                                                                df_election_fractions$sec_offset <= xlims[2],]
@@ -2826,14 +2865,15 @@ plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_
         min(df_election_fractions_subinterval$democrat_stat, na.rm = TRUE) < max(df_election_fractions_subinterval$democrat_stat, na.rm = TRUE)))
     {
       plot.batch.size.barchart(df_election_fractions = df_election_fractions,
-                               xlims = xlims)
+                               xlims = xlims, ylims.batch.size = ylims.batch.size)
       par(new = T, xpd=FALSE)
       lab.list.x.pos <- plot.cumulative.vote.fracs(df_election_fractions = df_election_fractions,
                                                    xlims = xlims,
                                                    race = race,
                                                    state_name = state_name,
                                                    json_url = json_url,
-                                                   my_github_base = my_github_base)
+                                                   my_github_base = my_github_base,
+                                                   ylims.cumulative.vote.fractions = ylims.cumulative.vote.fractions)
       par(new = T, xpd=FALSE)
       ylims <- plot.cumulative.tally.percent(df_election_fractions = df_election_fractions,
                                              xlims = xlims, lab.list.x.pos = lab.list.x.pos)
@@ -2855,7 +2895,7 @@ plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_
   }
 }
 
-plot.batch.size.barchart <- function(df_election_fractions, xlims)
+compute.ylims.right.batch.size <- function(df_election_fractions, xlims)
 {
   n <- nrow(df_election_fractions)
   widths <- c()
@@ -2890,8 +2930,8 @@ plot.batch.size.barchart <- function(df_election_fractions, xlims)
     widths <- c(widths, xlims[2] - df_election_fractions$sec_offset[indexObsAfterInterval])
     heights <- c(heights, df_election_fractions$votes_delta[indexObsAfterInterval+1] *
                    ( (xlims[2] - df_election_fractions$sec_offset[indexObsAfterInterval]) /
-                      (df_election_fractions$sec_offset[indexObsAfterInterval+1] -
-                         df_election_fractions$sec_offset[indexObsAfterInterval]) ) )
+                       (df_election_fractions$sec_offset[indexObsAfterInterval+1] -
+                          df_election_fractions$sec_offset[indexObsAfterInterval]) ) )
   }
   heights.non.negative <- heights
   heights.non.negative[heights.non.negative < 0] <- 0
@@ -2901,7 +2941,29 @@ plot.batch.size.barchart <- function(df_election_fractions, xlims)
   
   # https://stackoverflow.com/questions/34204198/how-to-superimpose-bar-plots-in-r
   # Plot the new data with a different ylim, but don't plot the axis
-  ylims <- c(0, max(heights.non.negative, heights.non.positive) * 1.05)
+  ylims <- c(0, max(heights.non.negative, heights.non.positive) * 1.1)
+  return(list(ylims = ylims, widths = widths, heights = heights,
+              heights.non.negative = heights.non.negative, heights.non.positive = heights.non.positive))
+}
+
+plot.batch.size.barchart <- function(df_election_fractions, xlims, ylims.batch.size = NULL)
+{
+  list.ylims.info <- compute.ylims.right.batch.size(
+    df_election_fractions = df_election_fractions, xlims = xlims)
+  if(is.null(ylims.batch.size))
+  {
+    ylims <- list.ylims.info[["ylims"]]
+  } else
+  {
+    ylims <- ylims.batch.size
+  }
+  widths <- list.ylims.info[["widths"]]
+  heights <- list.ylims.info[["heights"]]
+  heights.non.negative <- list.ylims.info[["heights.non.negative"]]
+  heights.non.positive <- list.ylims.info[["heights.non.positive"]]
+
+  # https://stackoverflow.com/questions/34204198/how-to-superimpose-bar-plots-in-r
+  # Plot the new data with a different ylim, but don't plot the axis
   barplot(width=widths,
           height=heights.non.negative,
           col = "darkgrey", border = "darkgrey", lwd = 1, las = 1,
@@ -2985,8 +3047,7 @@ draw.timeline.ticks.labels <- function(xlims, ylims)
   return(list(x.axis.label = x.axis.label,lab.list.x.pos = lab.list.x.pos))
 }
 
-plot.batch.impact.statistic <- function(df_election_fractions, xlims,
-                                        race, state_name, json_url, my_github_base)
+compute.ylims.left.batch.impact.statistic <- function(df_election_fractions, xlims)
 {
   ylims <- c(min(df_election_fractions$republican_stat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                  df_election_fractions$democrat_stat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
@@ -2994,6 +3055,19 @@ plot.batch.impact.statistic <- function(df_election_fractions, xlims,
              max(df_election_fractions$republican_stat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                  df_election_fractions$democrat_stat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                  na.rm = TRUE))
+  return(ylims)
+}
+
+plot.batch.impact.statistic <- function(df_election_fractions, xlims,
+                                        race, state_name, json_url, my_github_base, ylims.batch.impact = NULL)
+{
+  if(is.null(ylims.batch.impact))
+  {
+    ylims <- compute.ylims.left.batch.impact.statistic(df_election_fractions = df_election_fractions, xlims = xlims)
+  } else
+  {
+    ylims <- ylims.batch.impact
+  }
   par(family="sans") # By default Helvetica which is like Arial
   plot(x = df_election_fractions$sec_offset,
        y = rep(0,length(df_election_fractions$sec_offset)),
@@ -3066,9 +3140,10 @@ plot.batch.impact.statistic <- function(df_election_fractions, xlims,
   return(lab.list.x.pos)
 }
 
-plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
-                                        race, state_name, json_url, my_github_base)
+compute.ylims.left.cum.votes <- function(df_election_fractions, xlims)
 {
+  #df_election_fractions_subinterval <- df_election_fractions[df_election_fractions$sec_offset >= xlims[1] &
+  #                                                             df_election_fractions$sec_offset <= xlims[2],]
   ylims <- c(min(df_election_fractions$vote_counts_republican_lb[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                  df_election_fractions$vote_counts_republican[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                  df_election_fractions$vote_counts_republican_ub[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
@@ -3083,6 +3158,19 @@ plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
                   df_election_fractions$vote_counts_democrat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                   df_election_fractions$vote_counts_democrat_ub[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
                   na.rm = TRUE))
+  return(ylims)
+}
+
+plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
+                                        race, state_name, json_url, my_github_base, ylims.cumulative.votes = NULL)
+{
+  if(is.null(ylims.cumulative.votes))
+  {
+    ylims <- compute.ylims.left.cum.votes(df_election_fractions = df_election_fractions, xlims = xlims)
+  } else
+  {
+    ylims <- ylims.cumulative.votes
+  }
   n <- nrow(df_election_fractions)
   par(family="sans") # By default Helvetica which is like Arial
   plot(x = df_election_fractions$sec_offset,
@@ -3165,19 +3253,30 @@ plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
   return(lab.list.x.pos)
 }
 
-plot.cumulative.vote.fracs <- function(df_election_fractions, xlims,
-                                        race, state_name, json_url, my_github_base)
+compute.ylims.left.cum.vote.fracs <- function(df_election_fractions, xlims)
 {
-  n <- nrow(df_election_fractions)
-  sd_t <- sd(df_election_fractions$vote_shares_republican)
-  sd_b <- sd(df_election_fractions$vote_shares_democrat)
-  ylims <- c(min(df_election_fractions$vote_shares_republican[n] - 3 * sd_t,
-                 df_election_fractions$vote_shares_democrat[n] - 3 * sd_b,
-                 na.rm = TRUE),
-             max(df_election_fractions$vote_shares_republican[n] + 3 * sd_t,
-                 df_election_fractions$vote_shares_democrat[n] + 3 * sd_b,
-                 na.rm = TRUE)) * 100
+  ylims <- c(min(df_election_fractions$vote_shares_republican[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
+                 df_election_fractions$vote_shares_democrat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
+                 na.rm = TRUE) * 100 / 1.1,
+             max(df_election_fractions$vote_shares_republican[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
+                 df_election_fractions$vote_shares_democrat[df_election_fractions$sec_offset >= xlims[1] & df_election_fractions$sec_offset <= xlims[2]],
+                 na.rm = TRUE) * 100 * 1.1)
+  return(ylims)
+}
+  
+plot.cumulative.vote.fracs <- function(df_election_fractions, xlims,
+                                        race, state_name, json_url, my_github_base,
+                                       ylims.cumulative.vote.fractions = NULL)
+{
+  if(is.null(ylims.cumulative.vote.fractions))
+  {
+    ylims <- compute.ylims.left.cum.vote.fracs(df_election_fractions, xlims)
+  } else
+  {
+    ylims <- ylims.cumulative.vote.fractions
+  }
 
+  n <- nrow(df_election_fractions)
   par(family="sans") # By default Helvetica which is like Arial
   plot(x = df_election_fractions$sec_offset,
        y = rep(df_election_fractions$vote_shares_democrat[n] * 100,
@@ -3311,6 +3410,29 @@ generate.plots.for.all.intervals <- function(str.input.file.path,
   }
 }
 
+compute.time.last.flip <- function(df_election_fractions)
+{
+  n <- nrow(df_election_fractions)
+  indices.flips <- which((df_election_fractions$vote_shares_republican[2:n] > df_election_fractions$vote_shares_democrat[2:n] &
+                            df_election_fractions$vote_shares_republican[1:(n-1)] <= df_election_fractions$vote_shares_democrat[1:(n-1)]) |
+                           (df_election_fractions$vote_shares_republican[2:n] < df_election_fractions$vote_shares_democrat[2:n] &
+                              df_election_fractions$vote_shares_republican[1:(n-1)] >= df_election_fractions$vote_shares_democrat[1:(n-1)]) |
+                           (df_election_fractions$vote_shares_republican[2:n] >= df_election_fractions$vote_shares_democrat[2:n] &
+                              df_election_fractions$vote_shares_republican[1:(n-1)] < df_election_fractions$vote_shares_democrat[1:(n-1)]) |
+                           (df_election_fractions$vote_shares_republican[2:n] <= df_election_fractions$vote_shares_democrat[2:n] &
+                              df_election_fractions$vote_shares_republican[1:(n-1)] > df_election_fractions$vote_shares_democrat[1:(n-1)]))
+  if(length(indices.flips) > 0)
+  {
+    index.last.flip <- max(indices.flips)
+    index.last.flip <- min(index.last.flip + 1, n)
+    int.time.last.flip <- df_election_fractions$sec_offset[index.last.flip]
+  } else
+  {
+    int.time.last.flip <- NA
+  }
+  return(int.time.last.flip)
+}
+
 generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
                                                         str.output.file.path,
                                                         json_url_base,
@@ -3347,7 +3469,9 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
       state_strings <- senate_state_strings
     } else
     {
+      url_string <- ""
       pdf_file_name_comp_race <- ""
+      state_strings <- NULL
     }
     for(state_index in 1:length(state_strings))
     {
@@ -3359,39 +3483,12 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
       if(!is.null(df_election_fractions))
       {
         pdf_file_name_comp_ts <- ts.type # "cf", "cv", or "ii";  # cumulative fraction, cumulative vote, incremental impact
-        pdf_file_name <- paste0(pdf_file_name_comp_date, "_",
-                                pdf_file_name_comp_plot_type,"_",
-                                pdf_file_name_comp_state, "_",
-                                pdf_file_name_comp_race, "_",
-                                pdf_file_name_comp_ts, ".pdf")
-        pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
+        int.time.last.flip <- compute.time.last.flip(df_election_fractions = df_election_fractions)
+        #
+        options(digits.secs = 0)
         n <- nrow(df_election_fractions)
         int_global_min_time <- df_election_fractions$sec_offset[1]
         int_global_max_time <- df_election_fractions$sec_offset[n]
-        indices.flips <- which((df_election_fractions$vote_shares_republican[2:n] > df_election_fractions$vote_shares_democrat[2:n] &
-                                  df_election_fractions$vote_shares_republican[1:(n-1)] <= df_election_fractions$vote_shares_democrat[1:(n-1)]) |
-                                 (df_election_fractions$vote_shares_republican[2:n] < df_election_fractions$vote_shares_democrat[2:n] &
-                                    df_election_fractions$vote_shares_republican[1:(n-1)] >= df_election_fractions$vote_shares_democrat[1:(n-1)]) |
-                                 (df_election_fractions$vote_shares_republican[2:n] >= df_election_fractions$vote_shares_democrat[2:n] &
-                                    df_election_fractions$vote_shares_republican[1:(n-1)] < df_election_fractions$vote_shares_democrat[1:(n-1)]) |
-                                 (df_election_fractions$vote_shares_republican[2:n] <= df_election_fractions$vote_shares_democrat[2:n] &
-                                    df_election_fractions$vote_shares_republican[1:(n-1)] > df_election_fractions$vote_shares_democrat[1:(n-1)]))
-        if(length(indices.flips) > 0)
-        {
-          index.last.flip <- max(indices.flips)
-          index.last.flip <- min(index.last.flip + 1, n)
-          int.time.last.flip <- df_election_fractions$sec_offset[index.last.flip]
-          #int_global_max_time <- int_global_min_time + (int.time.last.flip - int_global_min_time) * 2
-        } else
-        {
-          index.last.flip <- NA
-          int.time.last.flip <- NA
-          #int_global_max_time <- 0
-        }
-        #int_global_max_time <- min(int_global_max_time, as.numeric(strptime("2020-11-06T00:00:00Z", "%Y-%m-%dT%H:%M:%OSZ")))
-        #int_global_max_time must have at least 97.5 % of the votes computed?
-
-        options(digits.secs = 0)
         str_global_min_time <- format(as.POSIXct(
           int_global_min_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
         str_global_max_time <- format(as.POSIXct(
@@ -3403,6 +3500,15 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
         int_curr_max_time <- int_global_max_time
         str_curr_min_time <- str_global_min_time
         str_curr_max_time <- str_global_max_time
+        #
+        pdf_file_name <- paste0(pdf_file_name_comp_date, "_",
+                                pdf_file_name_comp_plot_type,"_",
+                                pdf_file_name_comp_state, "_",
+                                pdf_file_name_comp_race, "_",
+                                pdf_file_name_comp_ts, ".pdf")
+        pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
+        #CairoPDF(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
+        #cairo_pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5)
         while(TRUE)
         {
           #str_curr_min_time = "2020-11-03T21:00:00Z"
@@ -3474,9 +3580,187 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
             int_curr_min_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
           str_curr_max_time <- format(as.POSIXct(
             int_curr_max_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
-        }
+        } # END while(TRUE)
         dev.off()
       } # END if(!is.null(df_election_fractions))
     } # END for(state_index in 1:length(state_strings))
   } # END for(race_index in 1:length(race_strings))
-}
+} # END generate.plots.for.all.intervals.by.ts.type
+
+generate.plots.for.all.states <- function(str.input.file.path,
+                                          str.output.file.path,
+                                          json_url_base,
+                                          my_github_base,
+                                          race_strings,
+                                          president_state_strings,
+                                          senate_state_strings,
+                                          special_state_strings,
+                                          list_state_to_abbr,
+                                          str_election_date_abbr = "201103",
+                                          str_plot_type_abbr)
+{
+  pdf_output_path <- paste0(str.output.file.path,"/pdf")
+  pdf_file_name_comp_date <- str_election_date_abbr
+  pdf_file_name_comp_plot_type <- str_plot_type_abbr
+  #for(state_index in 1:length(president_state_strings))
+  for(state_index in 1:1)
+  {
+    state_name <- president_state_strings[state_index]
+    #str_curr_min_time = "2020-11-03T21:00:00Z"
+    #str_curr_max_time = "2020-11-05T00:00:00Z"
+    str_curr_min_time <- list_state_to_interval[[state_name]][["from"]]
+    str_curr_max_time <- list_state_to_interval[[state_name]][["to"]]
+    pdf_file_name_comp_state <- list_state_to_abbr[[state_name]]
+    pdf_file_name <- paste0(pdf_file_name_comp_date, "_",
+                            pdf_file_name_comp_plot_type, "_",
+                            pdf_file_name_comp_state, ".pdf")
+    pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
+    for(ts.type in c("cf", "cv", "ii")) # cumulative fraction, cumulative vote, incremental impact
+    {
+      pdf_file_name_comp_ts <- ts.type # "cf", "cv", or "ii";  # cumulative fraction, cumulative vote, incremental impact
+
+      # Iterate over races and compute Y-limits for both the left and the right y-axis.
+      # Use these global limits to overwrite the subsequent calls.
+      ylims.cumulative.vote.fractions <- NULL
+      ylims.cumulative.votes <- NULL
+      ylims.batch.impact <- NULL
+      ylims.batch.size <- NULL
+      for(race_index in 1:length(race_strings))
+      {
+        race <- race_strings[race_index]
+        is.race.available <-
+          ((race == "special" & state_name %in% special_state_strings) |
+          (race == "president" & state_name %in% president_state_strings) |
+          (race == "senate" & state_name %in% senate_state_strings))
+        if(is.race.available)
+        {
+          df_election_fractions <- read.csv.prepare.fraction.data(
+            str.input.file.path = str.input.file.path, state_name = state_name, race = race)
+          if(!is.null(df_election_fractions))
+          {
+            # Use "str_curr_min_time" and "str_curr_max_time" on "df_election_fractions"
+            # to update ylims ("ylims.cumulative.vote.fractions", "ylims.cumulative.votes", "ylims.batch.impact", "ylims.vote.tally")
+            xlims <- compute.xlims.lower.time(
+              str_curr_min_time = str_curr_min_time,
+              str_curr_max_time = str_curr_max_time,
+              df_election_fractions = df_election_fractions)
+            ylims.left.cum.vote.fracs <- compute.ylims.left.cum.vote.fracs(
+              df_election_fractions = df_election_fractions, xlims = xlims)
+            if(is.null(ylims.cumulative.vote.fractions))
+            {
+              ylims.cumulative.vote.fractions <- ylims.left.cum.vote.fracs
+            } else
+            {
+              ylims.cumulative.vote.fractions[1] <- min(ylims.cumulative.vote.fractions[1], ylims.left.cum.vote.fracs[1])
+              ylims.cumulative.vote.fractions[2] <- max(ylims.cumulative.vote.fractions[2], ylims.left.cum.vote.fracs[2])
+            }
+            ylims.left.cum.votes <- compute.ylims.left.cum.votes(
+              df_election_fractions = df_election_fractions, xlims = xlims)
+            if(is.null(ylims.cumulative.votes))
+            {
+              ylims.cumulative.votes <- ylims.left.cum.votes
+            } else
+            {
+              ylims.cumulative.votes[1] <- min(ylims.cumulative.votes[1], ylims.left.cum.votes[1])
+              ylims.cumulative.votes[2] <- max(ylims.cumulative.votes[2], ylims.left.cum.votes[2])
+            }
+            ylims.left.batch.impact.statistic <- compute.ylims.left.batch.impact.statistic(
+              df_election_fractions = df_election_fractions, xlims = xlims)            
+            if(is.null(ylims.batch.impact))
+            {
+              ylims.batch.impact <- ylims.left.batch.impact.statistic
+            } else
+            {
+              ylims.batch.impact[1] <- min(ylims.batch.impact[1], ylims.left.batch.impact.statistic[1])
+              ylims.batch.impact[2] <- max(ylims.batch.impact[2], ylims.left.batch.impact.statistic[2])
+            }
+            list.ylims.right.batch.size.info <- compute.ylims.right.batch.size(
+              df_election_fractions = df_election_fractions, xlims = xlims)
+            ylims.right.batch.size <- list.ylims.right.batch.size.info[["ylims"]]
+            if(is.null(ylims.batch.size))
+            {
+              ylims.batch.size <- ylims.right.batch.size
+            } else
+            {
+              ylims.batch.size[1] <- min(ylims.batch.size[1], ylims.right.batch.size[1])
+              ylims.batch.size[2] <- max(ylims.batch.size[2], ylims.right.batch.size[2])
+            }
+          } # END if(!is.null(df_election_fractions))
+        } # END if(is.race.available)
+      } # END for(race_index in 1:length(race_strings))
+      #
+      for(race_index in 1:length(race_strings))
+      {
+        race <- race_strings[race_index]
+        is.race.available <-
+          ((race == "special" & state_name %in% special_state_strings) |
+             (race == "president" & state_name %in% president_state_strings) |
+             (race == "senate" & state_name %in% senate_state_strings))
+        if(is.race.available)
+        {
+          df_election_fractions <- read.csv.prepare.fraction.data(
+            str.input.file.path = str.input.file.path, state_name = state_name, race = race)
+          if(!is.null(df_election_fractions))
+          {
+            int.time.last.flip <- compute.time.last.flip(df_election_fractions = df_election_fractions)
+            if(race == "special")
+            {
+              url_string <- "senate/0/special.json"
+            } else if (race == "president")
+            {
+              url_string <- "president.json"
+            } else if (race == "senate")
+            {
+              url_string <- "senate.json"
+            } else
+            {
+              url_string <- ""
+            }
+            json_url <- paste0(json_url_base, "/", state_name, "/", url_string)
+            if(pdf_file_name_comp_ts == "cf")
+            {
+              plot.cumulative.vote.fractions(
+                str_curr_min_time = str_curr_min_time,
+                str_curr_max_time = str_curr_max_time,
+                df_election_fractions = df_election_fractions,
+                race = race,
+                state_name = state_name,
+                json_url = json_url,
+                my_github_base = my_github_base,
+                int.time.last.flip = int.time.last.flip,
+                ylims.batch.size = ylims.batch.size,
+                ylims.cumulative.vote.fractions = ylims.cumulative.vote.fractions)
+            } else if(pdf_file_name_comp_ts == "cv")
+            {
+              plot.cumulative.votes(
+                str_curr_min_time = str_curr_min_time,
+                str_curr_max_time = str_curr_max_time,
+                df_election_fractions = df_election_fractions,
+                race = race,
+                state_name = state_name,
+                json_url = json_url,
+                my_github_base = my_github_base,
+                int.time.last.flip = int.time.last.flip,
+                ylims.batch.size = ylims.batch.size,
+                ylims.cumulative.votes = ylims.cumulative.votes)
+            } else if(pdf_file_name_comp_ts == "ii")
+            {
+              plot.batch.impact(
+                str_curr_min_time = str_curr_min_time,
+                str_curr_max_time = str_curr_max_time,
+                df_election_fractions = df_election_fractions,
+                race = race,
+                state_name = state_name,
+                json_url = json_url,
+                my_github_base = my_github_base,
+                int.time.last.flip = int.time.last.flip,
+                ylims.batch.size = ylims.batch.size,
+                ylims.batch.impact = ylims.batch.impact)
+            }
+          } # END if(!is.null(df_election_fractions))
+        } # END if(is.race.available)
+      } # END for(race_index in 1:length(race_strings))
+    } # END for(ts.type in c("cf", "cv", "ii"))
+    dev.off()
+  } # END for(state_index in 1:length(president_state_strings))
+} # END generate.plots.for.all.states <- function
