@@ -3448,6 +3448,7 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
                                                         str_election_date_abbr = "201103",
                                                         str_plot_type_abbr)
 {
+  csv_output_path <- paste0(str.output.file.path,"/csv")
   pdf_output_path <- paste0(str.output.file.path,"/pdf")
   pdf_file_name_comp_date <- str_election_date_abbr
   pdf_file_name_comp_plot_type <- str_plot_type_abbr
@@ -3503,14 +3504,17 @@ generate.plots.for.all.intervals.by.ts.type <- function(str.input.file.path,
         str_curr_min_time <- str_global_min_time
         str_curr_max_time <- str_global_max_time
         #
-        pdf_file_name <- paste0(pdf_file_name_comp_date, "_",
-                                pdf_file_name_comp_plot_type,"_",
-                                pdf_file_name_comp_state, "_",
-                                pdf_file_name_comp_race, "_",
-                                pdf_file_name_comp_ts, ".pdf")
-        pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
-        #CairoPDF(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
-        #cairo_pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5)
+        output_file_name <- paste0(pdf_file_name_comp_date, "_",
+                                   pdf_file_name_comp_plot_type,"_",
+                                   pdf_file_name_comp_state, "_",
+                                   pdf_file_name_comp_race, "_",
+                                   pdf_file_name_comp_ts)
+        csv_output_file_name <- paste0(output_file_name, ".csv")
+        write.csv(x = df_election_fractions, file = paste0(csv_output_path,"/",csv_output_file_name), row.names = FALSE)
+        pdf_output_file_name <- paste0(output_file_name, ".pdf")
+        pdf(file=paste0(pdf_output_path,"/",pdf_output_file_name), width=11, height=8.5, paper="special")
+        #CairoPDF(file=paste0(pdf_output_path,"/",pdf_output_file_name), width=11, height=8.5, paper="special")
+        #cairo_pdf(file=paste0(pdf_output_path,"/",pdf_output_file_name), width=11, height=8.5)
         while(TRUE)
         {
           #str_curr_min_time = "2020-11-03T21:00:00Z"
@@ -3612,10 +3616,11 @@ generate.plots.for.all.states <- function(str.input.file.path,
     str_curr_min_time <- list_state_to_interval[[state_name]][["from"]]
     str_curr_max_time <- list_state_to_interval[[state_name]][["to"]]
     pdf_file_name_comp_state <- list_state_to_abbr[[state_name]]
-    pdf_file_name <- paste0(pdf_file_name_comp_date, "_",
-                            pdf_file_name_comp_plot_type, "_",
-                            pdf_file_name_comp_state, ".pdf")
-    pdf(file=paste0(pdf_output_path,"/",pdf_file_name), width=11, height=8.5, paper="special")
+    output_file_name <- paste0(pdf_file_name_comp_date, "_",
+                               pdf_file_name_comp_plot_type, "_",
+                               pdf_file_name_comp_state)
+    pdf_output_file_name <- paste0(output_file_name, ".pdf")
+    pdf(file=paste0(pdf_output_path,"/",pdf_output_file_name), width=11, height=8.5, paper="special")
     for(ts.type in c("cf", "cv", "ii")) # cumulative fraction, cumulative vote, incremental impact
     {
       pdf_file_name_comp_ts <- ts.type # "cf", "cv", or "ii";  # cumulative fraction, cumulative vote, incremental impact
