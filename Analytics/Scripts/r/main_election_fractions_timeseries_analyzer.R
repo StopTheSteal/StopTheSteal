@@ -12,8 +12,8 @@ library("lubridate")
 #library("Cairo")
 source("library_election_timeseries_analyzer.R")
 
-bool.download.json <- FALSE
-bool.generate.csv  <- FALSE
+bool.download.json <- TRUE
+bool.generate.csv  <- TRUE
 bool.backup.csv    <- FALSE
 bool.generate.pdf  <- TRUE
 
@@ -54,12 +54,7 @@ if(bool.generate.pdf)
                                 list_state_to_abbr = list_state_to_abbr,
                                 str_election_date_abbr = "201103",
                                 str_plot_type_abbr = "st")
-}
-
-#if(bool.generate.pdf)
-if(FALSE)
-{
-    generate.plots.for.all.intervals(str.input.file.path = str.input.file.path,
+  generate.plots.for.all.intervals(str.input.file.path = str.input.file.path,
                                    str.output.file.path = str.output.file.path,
                                    json_url_base = json_url_base,
                                    my_github_base = my_github_base,
@@ -70,5 +65,4 @@ if(FALSE)
                                    list_state_to_abbr = list_state_to_abbr,
                                    str_election_date_abbr = "201103",
                                    str_plot_type_abbr = "ts")
-  
 }

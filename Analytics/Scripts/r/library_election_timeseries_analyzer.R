@@ -125,57 +125,57 @@ list_state_to_abbr <- list(alabama = "al", alaska = "ak", arizona = "az", arkans
                            wyoming = "wy")
 
 list_state_to_interval <- list(
-  alabama                = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T22:00:00Z"), # TBD
-  alaska                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  arizona                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  arkansas               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  california             = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  colorado               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  connecticut            = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  delaware               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `district-of-columbia` = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  florida                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  georgia                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
-  hawaii                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  idaho                  = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  illinois               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  indiana                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  iowa                   = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  kansas                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  kentucky               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  louisiana              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  maine                  = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  maryland               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  massachusetts          = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  michigan               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
-  minnesota              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  mississippi            = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  missouri               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  montana                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  nebraska               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  nevada                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `new-hampshire`        = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `new-jersey`           = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `new-mexico`           = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `new-york`             = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `north-carolina`       = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `north-dakota`         = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  ohio                   = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  oklahoma               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  oregon                 = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  pennsylvania           = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
-  `rhode-island`         = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD,
-  `south-carolina`       = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `south-dakota`         = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  tennessee              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  texas                  = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  utah                   = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  vermont                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  virginia               = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  washington             = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  `west-virginia`        = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD
-  wisconsin              = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z"), # TBD!!!
-  wyoming                = list(from = "2020-11-03T20:00:00Z", to = "2020-11-07T20:00:00Z") # TBD
+  alabama                = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T22:00:00Z"), # Done (1)
+  alaska                 = list(from = "2020-11-04T05:00:00Z", to = "2020-12-03T20:00:00Z"), # Done (2)
+  arizona                = list(from = "2020-11-04T02:00:00Z", to = "2020-11-12T06:00:00Z"), # Done (3)
+  arkansas               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T23:00:00Z"), # Done (4)
+  california             = list(from = "2020-11-04T04:00:00Z", to = "2020-11-27T20:00:00Z"), # Done (5)
+  colorado               = list(from = "2020-11-04T02:00:00Z", to = "2020-11-07T02:00:00Z"), # Done (6)
+  connecticut            = list(from = "2020-11-04T01:00:00Z", to = "2020-11-07T22:00:00Z"), # Done (7)
+  delaware               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T07:00:00Z"), # Done (8)
+  `district-of-columbia` = list(from = "2020-11-04T01:00:00Z", to = "2020-11-26T00:00:00Z"), # Done (9)
+  florida                = list(from = "2020-11-04T00:00:00Z", to = "2020-11-04T06:00:00Z"), # Done (10)
+  georgia                = list(from = "2020-11-04T03:00:00Z", to = "2020-11-10T00:00:00Z"), # Done (11)
+  hawaii                 = list(from = "2020-11-04T08:00:00Z", to = "2020-11-04T18:00:00Z"), # Done (12)
+  idaho                  = list(from = "2020-11-04T03:00:00Z", to = "2020-11-05T02:00:00Z"), # Done (13)
+  illinois               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-17T20:00:00Z"), # Done (14)
+  indiana                = list(from = "2020-11-03T23:00:00Z", to = "2020-11-06T22:00:00Z"), # Done (15)
+  iowa                   = list(from = "2020-11-04T03:00:00Z", to = "2020-11-04T11:00:00Z"), # Done (16)
+  kansas                 = list(from = "2020-11-04T01:00:00Z", to = "2020-11-10T20:00:00Z"), # Done (17)
+  kentucky               = list(from = "2020-11-03T23:00:00Z", to = "2020-11-07T00:00:00Z"), # Done (18)
+  louisiana              = list(from = "2020-11-04T02:00:00Z", to = "2020-11-04T06:00:00Z"), # Done (19)
+  maine                  = list(from = "2020-11-04T01:00:00Z", to = "2020-11-10T20:00:00Z"), # Done (20)
+  maryland               = list(from = "2020-11-04T02:00:00Z", to = "2020-11-24T20:00:00Z"), # Done (21)
+  massachusetts          = list(from = "2020-11-04T01:00:00Z", to = "2020-11-07T20:00:00Z"), # Done (22)
+  michigan               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-05T20:00:00Z"), # Done (23) !!!
+  minnesota              = list(from = "2020-11-04T02:00:00Z", to = "2020-11-04T11:00:00Z"), # Done (24)
+  mississippi            = list(from = "2020-11-04T01:00:00Z", to = "2020-11-17T20:00:00Z"), # Done (25)
+  missouri               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T08:00:00Z"), # Done (26)
+  montana                = list(from = "2020-11-04T03:00:00Z", to = "2020-11-05T21:00:00Z"), # Done (27)
+  nebraska               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-05T02:00:00Z"), # Done (28)
+  nevada                 = list(from = "2020-11-04T04:00:00Z", to = "2020-11-14T16:00:00Z"), # Done (29)
+  `new-hampshire`        = list(from = "2020-11-03T20:00:00Z", to = "2020-11-05T05:00:00Z"), # Done (30)
+  `new-jersey`           = list(from = "2020-11-04T01:00:00Z", to = "2020-11-17T20:00:00Z"), # Done (31)
+  `new-mexico`           = list(from = "2020-11-04T02:00:00Z", to = "2020-11-04T08:00:00Z"), # Done (32)
+  `new-york`             = list(from = "2020-11-04T02:00:00Z", to = "2020-12-05T20:00:00Z"), # Done (33)
+  `north-carolina`       = list(from = "2020-11-04T00:00:00Z", to = "2020-11-04T04:00:00Z"), # Done (34)
+  `north-dakota`         = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T12:00:00Z"), # Done (35)
+  ohio                   = list(from = "2020-11-04T00:00:00Z", to = "2020-11-04T07:00:00Z"), # Done (36)
+  oklahoma               = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T07:00:00Z"), # Done (37)
+  oregon                 = list(from = "2020-11-04T04:00:00Z", to = "2020-11-06T03:00:00Z"), # Done (38)
+  pennsylvania           = list(from = "2020-11-04T00:00:00Z", to = "2020-11-13T00:00:00Z"), # Done (39)!!!
+  `rhode-island`         = list(from = "2020-11-04T01:00:00Z", to = "2020-11-07T00:00:00Z"), # Done (40)
+  `south-carolina`       = list(from = "2020-11-04T00:00:00Z", to = "2020-11-05T22:00:00Z"), # Done (41)
+  `south-dakota`         = list(from = "2020-11-04T02:00:00Z", to = "2020-11-05T03:00:00Z"), # Done (42)
+  tennessee              = list(from = "2020-11-04T01:00:00Z", to = "2020-11-04T10:00:00Z"), # Done (43)
+  texas                  = list(from = "2020-11-04T00:00:00Z", to = "2020-11-04T12:00:00Z"), # Done (44)
+  utah                   = list(from = "2020-11-04T03:00:00Z", to = "2020-11-15T20:00:00Z"), # Done (45)
+  vermont                = list(from = "2020-11-04T00:00:00Z", to = "2020-11-12T18:00:00Z"), # Done (46)
+  virginia               = list(from = "2020-11-04T00:00:00Z", to = "2020-11-04T12:00:00Z"), # Done (47)
+  washington             = list(from = "2020-11-04T03:00:00Z", to = "2020-11-17T20:00:00Z"), # Done (48)
+  `west-virginia`        = list(from = "2020-11-04T00:00:00Z", to = "2020-11-14T18:00:00Z"), # Done (49)
+  wisconsin              = list(from = "2020-11-04T02:00:00Z", to = "2020-11-04T13:00:00Z"), # Done (50)!!!
+  wyoming                = list(from = "2020-11-04T02:00:00Z", to = "2020-11-04T10:00:00Z")  # Done (51)
 )
 
 list_state_to_sen_cand_rep <- list(
@@ -2444,8 +2444,10 @@ produce.plots <- function(base_dir, state_abbr, use.csv = FALSE)
 simpleCap <- function(x)
 {
   s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1,1)), substring(s, 2),
-        sep="", collapse=" ")
+  r <- paste(toupper(substring(s, 1,1)), substring(s, 2), sep="", collapse=" ")
+  s <- strsplit(r, "-")[[1]]
+  r <- paste(toupper(substring(s, 1,1)), substring(s, 2), sep="", collapse="-")
+  return(r)
 }
 
 download.json.generate.csv.for.fractions <- function(str.input.file.path, json_url_base,
@@ -3602,8 +3604,7 @@ generate.plots.for.all.states <- function(str.input.file.path,
   pdf_output_path <- paste0(str.output.file.path,"/pdf")
   pdf_file_name_comp_date <- str_election_date_abbr
   pdf_file_name_comp_plot_type <- str_plot_type_abbr
-  #for(state_index in 1:length(president_state_strings))
-  for(state_index in 1:1)
+  for(state_index in 1:length(president_state_strings))
   {
     state_name <- president_state_strings[state_index]
     #str_curr_min_time = "2020-11-03T21:00:00Z"
