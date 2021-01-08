@@ -1829,7 +1829,8 @@ generate.precinct.vote.type.csv <- function(base_dir, sid, state_abbr, file_pref
                time_origin_ms = time_origin_ms, df_choices = df_choices))
 }
 
-generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_postfixes)
+generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_postfixes,
+                                   orig_file_postfixes = TRUE, str_election_date_YYYYMMDD = "")
 {
   json_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts")
   csv_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/csv")
@@ -1903,21 +1904,29 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
   for(iTimestampFilePostfix in 1:length(file_postfixes))
   {
     str_snapshot_timestamp <- file_postfixes[iTimestampFilePostfix] # e.g. "2020-11-03T23:40:53.084Z" or 1604475653084
-    if(str_snapshot_timestamp != "latest")
+    if(orig_file_postfixes)
     {
-      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      if(str_snapshot_timestamp != "latest")
+      {
+        num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      } else
+      {
+        num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      }
+      #
+      json_postfix_out <- file_postfixes[iTimestampFilePostfix]
+      json_postfix_out <- gsub("T","_", json_postfix_out)
+      json_postfix_out <- gsub("Z", "", json_postfix_out)
+      json_postfix_out <- gsub("-","_", json_postfix_out)
+      json_postfix_out <- gsub(":","_", json_postfix_out)
+      json_postfix_out <- gsub(".","_", json_postfix_out, fixed = TRUE)
     } else
     {
-      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y_%m_%d_%H_%M_%OS"))*1000.0) # + 0.001
+      #as.POSIXct(num_snapshot_timestamp_ms/1000, origin = "1970-01-01")
+      json_postfix_out <- str_snapshot_timestamp
     }
     time_origin_ms <- ifelse(num_snapshot_timestamp_ms < time_origin_ms, num_snapshot_timestamp_ms, time_origin_ms)
-    #
-    json_postfix_out <- file_postfixes[iTimestampFilePostfix]
-    json_postfix_out <- gsub("T","_", json_postfix_out)
-    json_postfix_out <- gsub("Z", "", json_postfix_out)
-    json_postfix_out <- gsub("-","_", json_postfix_out)
-    json_postfix_out <- gsub(":","_", json_postfix_out)
-    json_postfix_out <- gsub(".","_", json_postfix_out, fixed = TRUE)
     json_path_name <- paste0(json_path,"/", gsub("-","_", file_prefix),json_postfix_out,file_extension)
     
     print(paste0("Generating Precinct by Vote Types CSV for ", state_abbr, " at ", json_postfix_out))
@@ -2111,11 +2120,11 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
     df_precinct_vote_type_ids$vote_type),]
   df_choices <- df_choices[order(-df_choices$choice_weight),]
   
-  write.csv(x = df_vote_type_ids, file = paste0(csv_path,"/",state_abbr,"_vote_type",".csv"), row.names = FALSE)
-  write.csv(x = df_county_ids, file = paste0(csv_path,"/",state_abbr,"_county",".csv"), row.names = FALSE)
-  write.csv(x = df_precinct_ids, file = paste0(csv_path,"/",state_abbr,"_precinct",".csv"), row.names = FALSE)
-  write.csv(x = df_county_vote_type_ids, file = paste0(csv_path,"/",state_abbr,"_county_vote_type",".csv"), row.names = FALSE)
-  write.csv(x = df_precinct_vote_type_ids, file = paste0(csv_path,"/",state_abbr,"_precinct_vote_type",".csv"), row.names = FALSE)
+  write.csv(x = df_vote_type_ids, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_vote_type",".csv"), row.names = FALSE)
+  write.csv(x = df_county_ids, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_county",".csv"), row.names = FALSE)
+  write.csv(x = df_precinct_ids, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_precinct",".csv"), row.names = FALSE)
+  write.csv(x = df_county_vote_type_ids, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_county_vote_type",".csv"), row.names = FALSE)
+  write.csv(x = df_precinct_vote_type_ids, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_precinct_vote_type",".csv"), row.names = FALSE)
 
   return (list(
     ht_vote_type_ids = ht_vote_type_ids, df_vote_type_ids = df_vote_type_ids,
@@ -2128,7 +2137,8 @@ generate.precinct.csv2 <- function(base_dir, sid, state_abbr, file_prefix, file_
 
 generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abbr,file_prefix,
                                         file_postfixes, ht_vote_type_ids, ht_county_ids, ht_precinct_ids,
-                                        df_choices, negligible.choice.fraction.upper.threshold)
+                                        df_choices, negligible.choice.fraction.upper.threshold,
+                                        orig_file_postfixes = TRUE, str_election_date_YYYYMMDD = "")
 {
   json_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts")
   csv_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/csv")
@@ -2144,31 +2154,39 @@ generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abb
   for(iTimestampFilePostfix in 1:length(file_postfixes))
   {
     str_snapshot_timestamp <- file_postfixes[iTimestampFilePostfix] # e.g. "2020-11-03T23:40:53.084Z" or 1604475653084
-    if(str_snapshot_timestamp != "latest")
+    if(orig_file_postfixes)
     {
-      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      if(str_snapshot_timestamp != "latest")
+      {
+        num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+      } else
+      {
+        #if(length(file_postfixes) > 1)
+        #{
+        #  str_snapshot_timestamp_prev <- file_postfixes[iTimestampFilePostfix - 1]
+        #  str_snapshot_timestamp_prev_prev <- file_postfixes[iTimestampFilePostfix - 2]
+        #  num_snapshot_timestamp_ms_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+        #  num_snapshot_timestamp_ms_prev_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+        #  num_snapshot_timestamp_ms <- num_snapshot_timestamp_ms_prev + (num_snapshot_timestamp_ms_prev - num_snapshot_timestamp_ms_prev_prev)
+        #} else
+        #{
+          num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
+        #}
+      }
+      #
+      json_postfix_out <- file_postfixes[iTimestampFilePostfix]
+      json_postfix_out <- gsub("T","_", json_postfix_out)
+      json_postfix_out <- gsub("Z", "", json_postfix_out)
+      json_postfix_out <- gsub("-","_", json_postfix_out)
+      json_postfix_out <- gsub(":","_", json_postfix_out)
+      json_postfix_out <- gsub(".","_", json_postfix_out, fixed = TRUE)
     } else
     {
-      #if(length(file_postfixes) > 1)
-      #{
-      #  str_snapshot_timestamp_prev <- file_postfixes[iTimestampFilePostfix - 1]
-      #  str_snapshot_timestamp_prev_prev <- file_postfixes[iTimestampFilePostfix - 2]
-      #  num_snapshot_timestamp_ms_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      #  num_snapshot_timestamp_ms_prev_prev <- round(as.numeric(strptime(str_snapshot_timestamp_prev_prev, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      #  num_snapshot_timestamp_ms <- num_snapshot_timestamp_ms_prev + (num_snapshot_timestamp_ms_prev - num_snapshot_timestamp_ms_prev_prev)
-      #} else
-      #{
-        num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_latest_snapshot_timestamp, "%Y-%m-%dT%H:%M:%OSZ"))*1000.0) # + 0.001
-      #}
+      num_snapshot_timestamp_ms <- round(as.numeric(strptime(str_snapshot_timestamp, "%Y_%m_%d_%H_%M_%OS"))*1000.0) # + 0.001
+      #as.POSIXct(num_snapshot_timestamp_ms/1000, origin = "1970-01-01")
+      json_postfix_out <- str_snapshot_timestamp
     }
     time_offset_ms <- num_snapshot_timestamp_ms - time_origin_ms
-    #
-    json_postfix_out <- file_postfixes[iTimestampFilePostfix]
-    json_postfix_out <- gsub("T","_", json_postfix_out)
-    json_postfix_out <- gsub("Z", "", json_postfix_out)
-    json_postfix_out <- gsub("-","_", json_postfix_out)
-    json_postfix_out <- gsub(":","_", json_postfix_out)
-    json_postfix_out <- gsub(".","_", json_postfix_out, fixed = TRUE)
     json_path_name <- paste0(json_path,"/", gsub("-","_", file_prefix),json_postfix_out,file_extension)
     
     print(paste0("Generating Precinct by Vote Type and Vote Count Time Series CSV for ", state_abbr, " at ", json_postfix_out))
@@ -2266,11 +2284,11 @@ generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abb
       df_precinct_votes$vid),]
     if(iTimestampFilePostfix == 1)
     {
-      write.csv(x = df_precinct_votes, file = paste0(csv_path,"/",state_abbr,"_precinct_vote_type_count_ts",".csv"),
+      write.csv(x = df_precinct_votes, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_precinct_vote_type_count_ts",".csv"),
                 row.names = FALSE)
     } else
     {
-      write.table(x = df_precinct_votes, file = paste0(csv_path,"/",state_abbr,"_precinct_vote_type_count_ts",".csv"),
+      write.table(x = df_precinct_votes, file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,"_precinct_vote_type_count_ts",".csv"),
                   sep = ",", append = TRUE, quote = FALSE,
                   col.names = FALSE, row.names = FALSE)
     }
@@ -2279,7 +2297,7 @@ generate.precinct.votes.csv <- function(base_dir, time_origin_ms, sid, state_abb
 
 ######################################################################################################
 
-generate.rds.from.csv <- function(base_dir, state_abbr, bool.save.state = FALSE)
+generate.rds.from.csv <- function(base_dir, state_abbr, bool.save.state = FALSE, str_election_date_YYYYMMDD = "")
 {
   csv_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/csv")
   rds_path <- paste0(base_dir,"/input/elections-assets/2020/data/precincts/rds")
@@ -2300,16 +2318,16 @@ generate.rds.from.csv <- function(base_dir, state_abbr, bool.save.state = FALSE)
   
   if(bool.save.state)
   {
-    df <- read.csv(file = paste0(csv_path,"/","state",".csv"))
-    saveRDS(df, file = paste0(rds_path,"/","state",".rds"))
+    df <- read.csv(file = paste0(csv_path,"/","state",str_election_date_YYYYMMDD,".csv"))
+    saveRDS(df, file = paste0(rds_path,"/","state",str_election_date_YYYYMMDD,".rds"))
     # df_clone <- readRDS(file = paste0(rds_path,"/","state",".rds"))
   }
   
   for(iPosfixIndex in 1:length(array_file_postfixes))
   {
-    df <- read.csv(file = paste0(csv_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".csv"))
-    saveRDS(df, file = paste0(rds_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".rds"))
-    # df_clone <- readRDS(file = paste0(rds_path,"/",state_abbr,array_file_postfixes[iPosfixIndex],".rds"))
+    df <- read.csv(file = paste0(csv_path,"/",state_abbr,str_election_date_YYYYMMDD,array_file_postfixes[iPosfixIndex],".csv"))
+    saveRDS(df, file = paste0(rds_path,"/",state_abbr,str_election_date_YYYYMMDD,array_file_postfixes[iPosfixIndex],".rds"))
+    # df_clone <- readRDS(file = paste0(rds_path,"/",state_abbr,str_election_date_YYYYMMDD,array_file_postfixes[iPosfixIndex],".rds"))
   }
 }
 
