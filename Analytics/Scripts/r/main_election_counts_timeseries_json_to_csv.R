@@ -26,10 +26,11 @@ str.input.file.path <- working_dir
 source("library_election_timeseries_analyzer.R")
 
 bool.rename.files <- FALSE # be careful with this indicator
-bool.convert.json.to.csv <- FALSE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
-bool.convert.csv.to.rds  <- FALSE
+bool.convert.json.to.csv <- TRUE  # set it to TRUE to convert the existing (downloaded) JSON data set into CSV data set.
+bool.convert.csv.to.rds  <- TRUE
 bool.aggregate.csv.by.county <- FALSE
 str_election_date_YYYYMMDD <- "20210105"
+#str_election_date_YYYYMMDD <- "20210105V2"
 
 # wget -O GA_S_1_5_2021`date +"%Y%m%d-%H%M%S"`.json https://static01.nyt.com/elections-assets/2020/data/api/2021-01-05/state-page/georgia.json
 # GASenateSpecialRunoff_2021_01_05_17_58_00_000.json
@@ -49,18 +50,31 @@ if(bool.rename.files)
               as.vector(paste0(json_path,"/",f$files.new)))
 }
 
+if(bool.rename.files)
+{
+  json_path <- paste0(str.input.file.path,"/input/elections-assets/2020/data/precincts")
+  f <- as.data.frame(list.files(path = json_path, pattern = "JSON-NYT-Precinct-.*json"), header=FALSE)
+  colnames(f) <- 'files.old'
+  f$files.new <- gsub("JSON-NYT-Precinct-([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})\\.json",
+                      "GASenateSpecialRunoffV2_\\1_\\2_\\3_\\4_\\5_00_000.json", f$files.old)
+  file.rename(as.vector(paste0(json_path,"/",f$files.old)),
+              as.vector(paste0(json_path,"/",f$files.new)))
+}
+
+
 if(bool.convert.json.to.csv)
 {
   negligible.choice.fraction.upper.threshold <- 0.05 # all election "choices" with votes fraction below this threshold are merged into "votes_others" choice.
   arrStateAbbrs_Special <- c("GA")
   arrStateNames_Special <- c("Georgia") # GA
-  list_file_prefixes_Special <- list(GA = "GASenateSpecialRunoff_")
+  str_file_prefix <- "GASenateSpecialRunoff_"
+  #str_file_prefix <- "GASenateSpecialRunoffV2_"
+  list_file_prefixes_Special <- list(GA = str_file_prefix)
   json_path <- paste0(str.input.file.path,"/input/elections-assets/2020/data/precincts")
-  f <- as.data.frame(list.files(path = json_path, pattern = "GASenateSpecialRunoff_.*json"), header=FALSE)
+  f <- as.data.frame(list.files(path = json_path, pattern = paste0(str_file_prefix,".*json")), header=FALSE)
   colnames(f) <- 'file_names'
   f <- f[order(f$file_names),]
-  list_file_postfixes_Special <- list(
-    GA = gsub("\\.json$","",gsub("^GASenateSpecialRunoff_","", f)))
+  list_file_postfixes_Special <- list(GA = gsub("\\.json$","",gsub(paste0("^",str_file_prefix),"", f)))
   
   df_state_ids <- data.frame(
     sid              = numeric(),
