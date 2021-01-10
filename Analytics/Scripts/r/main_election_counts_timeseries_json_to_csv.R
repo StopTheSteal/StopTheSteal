@@ -39,7 +39,6 @@ str_election_date_YYYYMMDD <- "20210105"
 if(bool.rename.files)
 {
   json_path <- paste0(str.input.file.path,"/input/elections-assets/2020/data/precincts")
-  json_path <- "C:/Users/JJohnson/Desktop/AllMyFiles/_Politics/GenElec2020/VoterRollsAnalysis/GA_Counts/NMG/loefflerk_warnockr"
   f <- as.data.frame(list.files(path = json_path, pattern = "nyt_GASenateSpecialRunoff-latest_.*json"), header=FALSE)
   colnames(f) <- 'files.old'
   f$files.new <- sapply(f$files.old,function(x) gsub("^[^.]*.",paste(gsub(".[^.]*$", "", x), '000.', sep='_'),x))
