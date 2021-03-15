@@ -2681,11 +2681,14 @@ read.csv.prepare.fraction.data <- function(str.input.file.path, state_name,race)
     df_election_fractions$vote_counts_democrat    <- df_election_fractions$votes * df_election_fractions$vote_shares_democrat
     df_election_fractions$vote_counts_democrat_ub <- df_election_fractions$votes * df_election_fractions$vote_shares_democrat_ub
     
-    df_election_fractions$votes_delta <- c(0,df_election_fractions$votes[2:n] - df_election_fractions$votes[1:(n-1)])
-    df_election_fractions$votes_republican_delta <- c(0,df_election_fractions$vote_counts_republican[2:n] - df_election_fractions$vote_counts_republican[1:(n-1)])
-    df_election_fractions$votes_democrat_delta <- c(0,df_election_fractions$vote_counts_democrat[2:n] - df_election_fractions$vote_counts_democrat[1:(n-1)])
+    df_election_fractions$votes_delta <- c(df_election_fractions$votes[1],df_election_fractions$votes[2:n] - df_election_fractions$votes[1:(n-1)])
+    df_election_fractions$votes_republican_delta <- c(df_election_fractions$vote_counts_republican[1],df_election_fractions$vote_counts_republican[2:n] - df_election_fractions$vote_counts_republican[1:(n-1)])
+    df_election_fractions$votes_democrat_delta <- c(df_election_fractions$vote_counts_democrat[1],df_election_fractions$vote_counts_democrat[2:n] - df_election_fractions$vote_counts_democrat[1:(n-1)])
+    
     df_election_fractions$vote_shares_republican_delta <- df_election_fractions$votes_republican_delta / df_election_fractions$votes_delta
+    df_election_fractions$vote_shares_republican_delta[is.nan(df_election_fractions$vote_shares_republican_delta)] <- 0
     df_election_fractions$vote_shares_democrat_delta <- df_election_fractions$votes_democrat_delta / df_election_fractions$votes_delta
+    df_election_fractions$vote_shares_democrat_delta[is.nan(df_election_fractions$vote_shares_democrat_delta)] <- 0
     
     df_election_fractions$time_delta_sec <- c(0,df_election_fractions$sec_offset[2:n] - df_election_fractions$sec_offset[1:(n-1)])
     df_election_fractions$time <- strptime(df_election_fractions$timestamp,"%Y-%m-%dT%H:%M:%OSZ")
@@ -2708,10 +2711,13 @@ read.csv.prepare.fraction.data <- function(str.input.file.path, state_name,race)
   }
   return(df_election_fractions)
 }
-  
+
 plot.batch.impact <- function(str_curr_min_time = NA, str_curr_max_time = NA,
                               df_election_fractions,
                               race, state_name, json_url, my_github_base, int.time.last.flip,
+                              str_elec_type = "General Election 2020",
+                              str_elec_month = "Nov",
+                              str_elec_year = "2020",
                               ylims.batch.size = NULL, ylims.batch.impact = NULL)
 {
   xlims <- compute.xlims.lower.time(
@@ -2748,6 +2754,9 @@ plot.batch.impact <- function(str_curr_min_time = NA, str_curr_max_time = NA,
                                                     state_name = state_name,
                                                     json_url = json_url,
                                                     my_github_base = my_github_base,
+                                                    str_elec_type = str_elec_type,
+                                                    str_elec_month = str_elec_month,
+                                                    str_elec_year = str_elec_year,
                                                     ylims.batch.impact = ylims.batch.impact)
       par(new = T, xpd=FALSE)
       ylims <- plot.cumulative.tally.percent(df_election_fractions = df_election_fractions,
@@ -2773,6 +2782,9 @@ plot.batch.impact <- function(str_curr_min_time = NA, str_curr_max_time = NA,
 plot.cumulative.votes <- function(str_curr_min_time = NA, str_curr_max_time = NA,
                                   df_election_fractions,
                                   race, state_name, json_url, my_github_base, int.time.last.flip,
+                                  str_elec_type = "General Election 2020",
+                                  str_elec_month = "Nov",
+                                  str_elec_year = "2020",
                                   ylims.batch.size = NULL, ylims.cumulative.votes = NULL)
 {
   xlims <- compute.xlims.lower.time(
@@ -2809,6 +2821,9 @@ plot.cumulative.votes <- function(str_curr_min_time = NA, str_curr_max_time = NA
                                                     state_name = state_name,
                                                     json_url = json_url,
                                                     my_github_base = my_github_base,
+                                                    str_elec_type = str_elec_type,
+                                                    str_elec_month = str_elec_month,
+                                                    str_elec_year = str_elec_year,
                                                     ylims.cumulative.votes = ylims.cumulative.votes)
       par(new = T, xpd=FALSE)
       ylims <- plot.cumulative.tally.percent(df_election_fractions = df_election_fractions,
@@ -2857,6 +2872,9 @@ compute.xlims.lower.time <- function(str_curr_min_time = NA, str_curr_max_time =
 
 plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_time = NA, df_election_fractions,
                                            race, state_name, json_url, my_github_base, int.time.last.flip,
+                                           str_elec_type = "General Election 2020",
+                                           str_elec_month = "Nov",
+                                           str_elec_year = "2020",
                                            ylims.batch.size = NULL, ylims.cumulative.vote.fractions = NULL)
 {
   xlims <- compute.xlims.lower.time(
@@ -2893,6 +2911,9 @@ plot.cumulative.vote.fractions <- function(str_curr_min_time = NA, str_curr_max_
                                                    state_name = state_name,
                                                    json_url = json_url,
                                                    my_github_base = my_github_base,
+                                                   str_elec_type = str_elec_type,
+                                                   str_elec_month = str_elec_month,
+                                                   str_elec_year = str_elec_year,
                                                    ylims.cumulative.vote.fractions = ylims.cumulative.vote.fractions)
       par(new = T, xpd=FALSE)
       ylims <- plot.cumulative.tally.percent(df_election_fractions = df_election_fractions,
@@ -3016,7 +3037,7 @@ plot.batch.size.barchart <- function(df_election_fractions, xlims, ylims.batch.s
   abline(h=lab.list.y.right.pos,col = "lightgray", lty = "dotted", lwd = 1)
 }
 
-draw.timeline.ticks.labels <- function(xlims, ylims)
+draw.timeline.ticks.labels <- function(xlims, ylims, str_elec_month = "Nov", str_elec_year = "2020")
 {
   par(family="mono") # By default Courier
   #print(paste0(ceiling((xlims[2] - xlims[1])/1),"; ",
@@ -3031,27 +3052,27 @@ draw.timeline.ticks.labels <- function(xlims, ylims)
     increment_secs <- 1 * ceiling(ceiling((xlims[2] - xlims[1])/1) / max.num.sub.intervals)
     increment_name <- "second"
     label.format.template <- "%H%M%S"
-    x.axis.label <- paste0("Nov. ", format(as.POSIXct(xlims[1], origin = "1970-01-01"),"%d"),
-      ", 2020, <Hour Start (00-23)><Minute Start (00-59)><Second Start (00-59)>")
+    x.axis.label <- paste0(str_elec_month,". ", format(as.POSIXct(xlims[1], origin = "1970-01-01"),"%d"),
+      ", ",str_elec_year,", <Hour Start (00-23)><Minute Start (00-59)><Second Start (00-59)>")
   } else
   if(ceiling((xlims[2] - xlims[1])/3600) / max.num.sub.intervals < threshold.format.change)
   {
     increment_secs <- 60 * ceiling(ceiling((xlims[2] - xlims[1])/60) / max.num.sub.intervals)
     increment_name <- "minute"
     label.format.template <- "%d%H%M"
-    x.axis.label <- "<Nov., 2020 Date><Hour Start (00-23)><Minute Start (00-59)>"
+    x.axis.label <- paste0("<",str_elec_month,"., ",str_elec_year," Date><Hour Start (00-23)><Minute Start (00-59)>")
   } else if(ceiling((xlims[2] - xlims[1])/86400) / max.num.sub.intervals < threshold.format.change)
   {
     increment_secs <- 3600 * ceiling(ceiling((xlims[2] - xlims[1])/3600) / max.num.sub.intervals)
     increment_name <- "hour"
     label.format.template <- "%d-%H"
-    x.axis.label <- "<Nov., 2020 Date>-<Hour Start (00-23)>"
+    x.axis.label <- paste0("<",str_elec_month,"., ",str_elec_year," Date>-<Hour Start (00-23)>")
   } else
   {
     increment_secs <- 86400 * ceiling(ceiling((xlims[2] - xlims[1])/86400) / max.num.sub.intervals)
     increment_name <- "day"
     label.format.template <- "%m-%d"
-    x.axis.label <- "<2020 Month>-<Date Start (01-31)>"
+    x.axis.label <- paste0("<",str_elec_year," Month>-<Date Start (01-31)>")
   }
   lab.list.x.pos <- as.numeric(seq(
     lubridate::ceiling_date(as.POSIXct(xlims[1], origin = "1970-01-01"), unit = increment_name),
@@ -3064,6 +3085,7 @@ draw.timeline.ticks.labels <- function(xlims, ylims)
        labels = format(lab.list.x.text[1:(m-1)], format=label.format.template),
        srt = 90, pos = 1, xpd = TRUE, cex = 0.75, offset = 1.15)
   abline(v=lab.list.x.pos,col = "lightgray", lty = "dotted", lwd = 1)
+
   return(list(x.axis.label = x.axis.label,lab.list.x.pos = lab.list.x.pos))
 }
 
@@ -3079,7 +3101,9 @@ compute.ylims.left.batch.impact.statistic <- function(df_election_fractions, xli
 }
 
 plot.batch.impact.statistic <- function(df_election_fractions, xlims,
-                                        race, state_name, json_url, my_github_base, ylims.batch.impact = NULL)
+                                        race, state_name, json_url, my_github_base,
+                                        str_elec_type, str_elec_month, str_elec_year,
+                                        ylims.batch.impact = NULL)
 {
   if(is.null(ylims.batch.impact))
   {
@@ -3097,7 +3121,9 @@ plot.batch.impact.statistic <- function(df_election_fractions, xlims,
        cex = 1, cex.axis = 1, cex.lab = 1, cex.sub = 1, cex.main = 1,
        xaxs ="i", yaxs = "i")
   #
-  list.timeline.ticks.rslt <- draw.timeline.ticks.labels(xlims = xlims, ylims = ylims)
+  list.timeline.ticks.rslt <- draw.timeline.ticks.labels(xlims = xlims, ylims = ylims,
+                                                         str_elec_month = str_elec_month,
+                                                         str_elec_year = str_elec_year)
   x.axis.label <- list.timeline.ticks.rslt[["x.axis.label"]]
   lab.list.x.pos <- list.timeline.ticks.rslt[["lab.list.x.pos"]]
   #
@@ -3130,7 +3156,7 @@ plot.batch.impact.statistic <- function(df_election_fractions, xlims,
   max_time <- gsub("\\.",":",format(as.POSIXct(xlims[2], origin = "1970-01-01"), "%Y-%m-%d, %H:%M:%OS"))
   #title(main = "Impacts of vote batches on the", line=3.4, cex.main=1)
   title(main = paste0("Vote batch impact on US ", sapply(gsub("president","presidential",race),simpleCap),
-                      " General Election 2020 results in ",
+                      " ", str_elec_type, " results in ",
                       sapply(state_name,simpleCap)), line=3, cex.main=1.1)
   title(main = paste0("from ", min_time, " to ", max_time), line=2.2, cex.main=1.1)
   #title(main = "Final Tally %", line=-1, cex.main=1)
@@ -3182,7 +3208,9 @@ compute.ylims.left.cum.votes <- function(df_election_fractions, xlims)
 }
 
 plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
-                                        race, state_name, json_url, my_github_base, ylims.cumulative.votes = NULL)
+                                        race, state_name, json_url, my_github_base,
+                                        str_elec_type, str_elec_month, str_elec_year,
+                                        ylims.cumulative.votes = NULL)
 {
   if(is.null(ylims.cumulative.votes))
   {
@@ -3201,7 +3229,9 @@ plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
        cex = 1, cex.axis = 1, cex.lab = 1, cex.sub = 1, cex.main = 1,
        xaxs ="i", yaxs = "i")
   #
-  list.timeline.ticks.rslt <- draw.timeline.ticks.labels(xlims = xlims, ylims = ylims)
+  list.timeline.ticks.rslt <- draw.timeline.ticks.labels(xlims = xlims, ylims = ylims,
+                                                         str_elec_month = str_elec_month,
+                                                         str_elec_year = str_elec_year)
   x.axis.label <- list.timeline.ticks.rslt[["x.axis.label"]]
   lab.list.x.pos <- list.timeline.ticks.rslt[["lab.list.x.pos"]]
   #
@@ -3225,7 +3255,7 @@ plot.cumulative.vote.counts <- function(df_election_fractions, xlims,
   min_time <- gsub("\\.",":",format(as.POSIXct(xlims[1], origin = "1970-01-01"), "%Y-%m-%d, %H:%M:%OS"))
   max_time <- gsub("\\.",":",format(as.POSIXct(xlims[2], origin = "1970-01-01"), "%Y-%m-%d, %H:%M:%OS"))
   title(main = paste0("Cumulative votes results in US ", sapply(gsub("president","presidential",race),simpleCap),
-                      " General Election 2020 in ",
+                      " ", str_elec_type, " in ",
                       sapply(state_name,simpleCap)), line=3, cex.main=1.1)
   title(main = paste0("from ", min_time, " to ", max_time), line=2.2, cex.main=1.1)
   #title(main = "Final Tally %", line=-1, cex.main=1)
@@ -3286,6 +3316,7 @@ compute.ylims.left.cum.vote.fracs <- function(df_election_fractions, xlims)
   
 plot.cumulative.vote.fracs <- function(df_election_fractions, xlims,
                                         race, state_name, json_url, my_github_base,
+                                       str_elec_type, str_elec_month, str_elec_year,
                                        ylims.cumulative.vote.fractions = NULL)
 {
   if(is.null(ylims.cumulative.vote.fractions))
@@ -3307,7 +3338,9 @@ plot.cumulative.vote.fracs <- function(df_election_fractions, xlims,
        cex = 1, cex.axis = 1, cex.lab = 1, cex.sub = 1, cex.main = 1,
        xaxs ="i", yaxs = "i", xpd = F)
   #
-  list.timeline.ticks.rslt <- draw.timeline.ticks.labels(xlims = xlims, ylims = ylims)
+  list.timeline.ticks.rslt <- draw.timeline.ticks.labels(xlims = xlims, ylims = ylims,
+                                                         str_elec_month = str_elec_month,
+                                                         str_elec_year = str_elec_year)
   x.axis.label <- list.timeline.ticks.rslt[["x.axis.label"]]
   lab.list.x.pos <- list.timeline.ticks.rslt[["lab.list.x.pos"]]
   #
@@ -3323,7 +3356,7 @@ plot.cumulative.vote.fracs <- function(df_election_fractions, xlims,
   max_time <- gsub("\\.",":",format(as.POSIXct(xlims[2], origin = "1970-01-01"), "%Y-%m-%d, %H:%M:%OS"))
   #title(main = "Impacts of vote batches on the", line=3.4, cex.main=1)
   title(main = paste0("Cumulative vote percent results in US ", sapply(gsub("president","presidential",race),simpleCap),
-                      " General Election 2020 in ",
+                      " ", str_elec_type, " in ",
                       sapply(state_name,simpleCap)), line=3, cex.main=1.1)
   title(main = paste0("from ", min_time, " to ", max_time), line=2.2, cex.main=1.1)
   #title(main = "Final Tally %", line=-1, cex.main=1)
@@ -3788,3 +3821,176 @@ generate.plots.for.all.states <- function(str.input.file.path,
     dev.off()
   } # END for(state_index in 1:length(president_state_strings))
 } # END generate.plots.for.all.states <- function
+
+prepare.fraction.data <- function(df_election_counts, df_state)
+{
+  df_election_fractions <- df_election_counts
+  #df_election_fractions <- df_election_fractions[order(df_election_fractions$time_offset_ms),]
+  df_election_fractions <- merge(x = df_election_fractions, y = df_state[,c(
+    "sid", "state_abbr", "state_name", "time_origin_ms")], by = "sid")
+
+  df_election_fractions$eevp_source <- "edison"
+  options(digits.secs = 0)
+  df_election_fractions$tmp_date_time <- as.POSIXct((df_election_fractions$time_origin_ms + df_election_fractions$time_offset_ms)/1000.0, origin="1970-01-01")
+  df_election_fractions$timestamp <- format(df_election_fractions$tmp_date_time, "%Y-%m-%dT%H:%M:%OSZ")
+  df_election_fractions$year <- format(df_election_fractions$tmp_date_time,"%Y")
+  df_election_fractions$mon <- format(df_election_fractions$tmp_date_time,"%m")
+  df_election_fractions$mday <- format(df_election_fractions$tmp_date_time,"%d")
+  df_election_fractions$hour <- format(df_election_fractions$tmp_date_time,"%H")
+  df_election_fractions$min <- format(df_election_fractions$tmp_date_time,"%M")
+  df_election_fractions$sec <- format(df_election_fractions$tmp_date_time,"%OS")
+  df_election_fractions$sec_offset <- (df_election_fractions$time_origin_ms + df_election_fractions$time_offset_ms)/1000.0
+  df_election_fractions$votes <- df_election_fractions$tally
+  df_election_fractions$eevp <- NA
+  df_election_fractions$vote_shares_warnockr <- df_election_fractions$votes_warnockr / df_election_fractions$tally
+  df_election_fractions$vote_shares_loefflerk <- df_election_fractions$votes_loefflerk / df_election_fractions$tally
+
+  df_election_fractions <- df_election_fractions[df_election_fractions$eevp_source == "edison" &
+                                                   df_election_fractions$votes > 0,]
+  df_election_fractions <- df_election_fractions[order(df_election_fractions$sec_offset,
+                                                       -df_election_fractions$votes),]
+  df_election_fractions <- df_election_fractions[!duplicated(df_election_fractions$sec_offset),]
+  rownames(df_election_fractions) <- NULL
+  n <- nrow(df_election_fractions)
+  #
+  colnames(df_election_fractions)[colnames(df_election_fractions)=="vote_shares_warnockr"] <- "vote_shares_democrat"
+  colnames(df_election_fractions)[colnames(df_election_fractions)=="vote_shares_loefflerk"] <- "vote_shares_republican"
+  #
+  num_rounding_error <- 0 # 0.0005
+  #
+  df_election_fractions$vote_shares_republican_lb <- df_election_fractions$vote_shares_republican - num_rounding_error
+  df_election_fractions$vote_shares_republican_lb[df_election_fractions$vote_shares_republican_lb < 0] <- 0
+  #
+  df_election_fractions$vote_shares_republican_ub <- df_election_fractions$vote_shares_republican + num_rounding_error
+  df_election_fractions$vote_shares_republican_ub[df_election_fractions$vote_shares_republican_ub > 1] <- 1
+  #
+  df_election_fractions$vote_shares_democrat_lb <- df_election_fractions$vote_shares_democrat - num_rounding_error
+  df_election_fractions$vote_shares_democrat_lb[df_election_fractions$vote_shares_democrat_lb < 0] <- 0
+  #
+  df_election_fractions$vote_shares_democrat_ub <- df_election_fractions$vote_shares_democrat + num_rounding_error
+  df_election_fractions$vote_shares_democrat_ub[df_election_fractions$vote_shares_democrat_ub > 1] <- 1
+  #
+  df_election_fractions$vote_counts_republican_lb <- df_election_fractions$votes * df_election_fractions$vote_shares_republican_lb
+  df_election_fractions$vote_counts_republican    <- df_election_fractions$votes * df_election_fractions$vote_shares_republican
+  df_election_fractions$vote_counts_republican_ub <- df_election_fractions$votes * df_election_fractions$vote_shares_republican_ub
+  #
+  df_election_fractions$vote_counts_democrat_lb <- df_election_fractions$votes * df_election_fractions$vote_shares_democrat_lb
+  df_election_fractions$vote_counts_democrat    <- df_election_fractions$votes * df_election_fractions$vote_shares_democrat
+  df_election_fractions$vote_counts_democrat_ub <- df_election_fractions$votes * df_election_fractions$vote_shares_democrat_ub
+
+  if(n > 1)
+  {
+    df_election_fractions$votes_delta <- c(df_election_fractions$votes[1],df_election_fractions$votes[2:n] - df_election_fractions$votes[1:(n-1)])
+    df_election_fractions$votes_republican_delta <- c(df_election_fractions$vote_counts_republican[1],df_election_fractions$vote_counts_republican[2:n] - df_election_fractions$vote_counts_republican[1:(n-1)])
+    df_election_fractions$votes_democrat_delta <- c(df_election_fractions$vote_counts_democrat[1],df_election_fractions$vote_counts_democrat[2:n] - df_election_fractions$vote_counts_democrat[1:(n-1)])
+  } else
+  {
+    df_election_fractions$votes_delta <- df_election_fractions$votes[1]
+    df_election_fractions$votes_republican_delta <- df_election_fractions$vote_counts_republican[1]
+    df_election_fractions$votes_democrat_delta <- df_election_fractions$vote_counts_democrat[1]
+  }
+  
+  df_election_fractions$vote_shares_republican_delta <- df_election_fractions$votes_republican_delta / df_election_fractions$votes_delta
+  df_election_fractions$vote_shares_republican_delta[is.nan(df_election_fractions$vote_shares_republican_delta)] <- 0
+  df_election_fractions$vote_shares_democrat_delta <- df_election_fractions$votes_democrat_delta / df_election_fractions$votes_delta
+  df_election_fractions$vote_shares_democrat_delta[is.nan(df_election_fractions$vote_shares_democrat_delta)] <- 0
+  
+  if(n > 1)
+  {
+    df_election_fractions$time_delta_sec <- c(0,df_election_fractions$sec_offset[2:n] - df_election_fractions$sec_offset[1:(n-1)])
+  } else
+  {
+    df_election_fractions$time_delta_sec <- 0
+  }
+  df_election_fractions$time <- strptime(df_election_fractions$timestamp,"%Y-%m-%dT%H:%M:%OSZ")
+  df_election_fractions$sec_offset2 <- as.numeric(df_election_fractions$time)
+  df_election_fractions$time2 <- as.POSIXct(df_election_fractions$sec_offset2, origin = "1970-01-01")
+  #df_election_fractions[,c("timestamp","sec_offset","sec_offset2","time","time2")]
+
+  if(n > 1)
+  {
+    df_election_fractions$republican_stat <- c(0,(df_election_fractions$vote_shares_republican_delta[2:n] -
+                                                    df_election_fractions$vote_shares_republican[1:(n-1)]) /
+                                                 df_election_fractions$vote_shares_republican[1:(n-1)] *
+                                                 (df_election_fractions$votes_delta[2:n] / df_election_fractions$votes[n]))
+    df_election_fractions$democrat_stat <- c(0,(df_election_fractions$vote_shares_democrat_delta[2:n] -
+                                                  df_election_fractions$vote_shares_democrat[1:(n-1)]) /
+                                               df_election_fractions$vote_shares_democrat[1:(n-1)] *
+                                               (df_election_fractions$votes_delta[2:n] / df_election_fractions$votes[n]))
+  } else
+  {
+    df_election_fractions$republican_stat <- 0
+    df_election_fractions$democrat_stat <- 0
+  }
+  df_election_fractions$republican_stat[is.infinite(df_election_fractions$republican_stat)] <- NaN
+  df_election_fractions$democrat_stat[is.infinite(df_election_fractions$democrat_stat)] <- NaN
+  
+  df_election_fractions$votes_pct <- df_election_fractions$votes / df_election_fractions$votes[n] * 100
+
+  return(df_election_fractions)
+}
+
+plot.election.results <- function(df_election_fractions, state_name, race, str_elec_year, str_elec_month, str_elec_type,
+                                  json_url, my_github_base, lst_lst_str_plot_intervals)
+{
+  int.time.last.flip <- compute.time.last.flip(df_election_fractions = df_election_fractions)
+  #options(digits.secs = 0)
+  #n <- nrow(df_election_fractions)
+  #int_global_min_time <- df_election_fractions$sec_offset[1]
+  #int_global_max_time <- df_election_fractions$sec_offset[n]
+  #str_global_min_time <- format(as.POSIXct(int_global_min_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
+  #str_global_max_time <- format(as.POSIXct(int_global_max_time, origin = "1970-01-01"),"%Y-%m-%dT%H:%M:%OSZ")
+  
+  for(int.interval.index in 1:length(lst_lst_str_plot_intervals))
+  {
+    lst_curr_interval <- lst_lst_str_plot_intervals[[int.interval.index]]
+    str_curr_min_time <- lst_curr_interval$min_time
+    str_curr_max_time = lst_curr_interval$max_time
+    for(ts.type in c("cv", "cf", "ii")) # cumulative vote, cumulative fraction, incremental impact
+    {
+      if(ts.type == "cv")
+      {
+        plot.cumulative.votes(
+          str_curr_min_time = str_curr_min_time,
+          str_curr_max_time = str_curr_max_time,
+          df_election_fractions = df_election_fractions,
+          race = race,
+          state_name = state_name,
+          json_url = json_url,
+          my_github_base = my_github_base,
+          int.time.last.flip = int.time.last.flip,
+          str_elec_type = str_elec_type,
+          str_elec_month = str_elec_month,
+          str_elec_year = str_elec_year)
+      } else if(ts.type == "cf")
+      {
+        plot.cumulative.vote.fractions(
+          str_curr_min_time = str_curr_min_time,
+          str_curr_max_time = str_curr_max_time,
+          df_election_fractions = df_election_fractions,
+          race = race,
+          state_name = state_name,
+          json_url = json_url,
+          my_github_base = my_github_base,
+          int.time.last.flip = int.time.last.flip,
+          str_elec_type = str_elec_type,
+          str_elec_month = str_elec_month,
+          str_elec_year = str_elec_year)
+      } else if(ts.type == "ii")
+      {
+        plot.batch.impact(
+          str_curr_min_time = str_curr_min_time,
+          str_curr_max_time = str_curr_max_time,
+          df_election_fractions = df_election_fractions,
+          race = race,
+          state_name = state_name,
+          json_url = json_url,
+          my_github_base = my_github_base,
+          int.time.last.flip = int.time.last.flip,
+          str_elec_type = str_elec_type,
+          str_elec_month = str_elec_month,
+          str_elec_year = str_elec_year)
+      }
+    } # END for(ts.type in c("cv", "cf", "ii"))
+  } # END for(int.interval.index in 1:length(lst_lst_str_plot_intervals))
+}
